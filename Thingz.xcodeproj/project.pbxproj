@@ -19,6 +19,7 @@
 		C02C36AB24C0E97C00648277 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02C36AA24C0E97B00648277 /* SQLite.framework */; };
 		C02C36AC24C0E97C00648277 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C02C36AA24C0E97B00648277 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C02C36AF24C10AF900648277 /* DatabaseFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C36AE24C10AF900648277 /* DatabaseFile.swift */; };
+		C02C36B224C11A2700648277 /* Untitled.thingz in Resources */ = {isa = PBXBuildFile; fileRef = C02C36B124C115E000648277 /* Untitled.thingz */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,7 @@
 		C02C36A824C0E7E600648277 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		C02C36AA24C0E97B00648277 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/iOS/SQLite.framework; sourceTree = "<group>"; };
 		C02C36AE24C10AF900648277 /* DatabaseFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseFile.swift; sourceTree = "<group>"; };
+		C02C36B124C115E000648277 /* Untitled.thingz */ = {isa = PBXFileReference; lastKnownFileType = text; path = Untitled.thingz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 		C02C368A24C0D5AF00648277 /* Thingz */ = {
 			isa = PBXGroup;
 			children = (
+				C02C36B024C1158B00648277 /* Artifacts */,
 				C02C36A224C0D6CA00648277 /* Views */,
 				C02C36A124C0D6B900648277 /* Classes */,
 				C02C368B24C0D5AF00648277 /* AppDelegate.swift */,
@@ -124,6 +127,14 @@
 				C02C36AA24C0E97B00648277 /* SQLite.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C02C36B024C1158B00648277 /* Artifacts */ = {
+			isa = PBXGroup;
+			children = (
+				C02C36B124C115E000648277 /* Untitled.thingz */,
+			);
+			path = Artifacts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +198,7 @@
 			files = (
 				C02C369A24C0D5B100648277 /* LaunchScreen.storyboard in Resources */,
 				C02C369724C0D5B100648277 /* Assets.xcassets in Resources */,
+				C02C36B224C11A2700648277 /* Untitled.thingz in Resources */,
 				C02C369524C0D5AF00648277 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
