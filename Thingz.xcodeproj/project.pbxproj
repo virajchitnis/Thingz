@@ -14,6 +14,7 @@
 		C02C369524C0D5AF00648277 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C02C369324C0D5AF00648277 /* Main.storyboard */; };
 		C02C369724C0D5B100648277 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C02C369624C0D5B100648277 /* Assets.xcassets */; };
 		C02C369A24C0D5B100648277 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C02C369824C0D5B100648277 /* LaunchScreen.storyboard */; };
+		C02C36A424C0D76000648277 /* Thing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C36A324C0D76000648277 /* Thing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		C02C369624C0D5B100648277 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C02C369924C0D5B100648277 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C02C369B24C0D5B100648277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C02C36A324C0D76000648277 /* Thing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,8 @@
 		C02C368A24C0D5AF00648277 /* Thingz */ = {
 			isa = PBXGroup;
 			children = (
+				C02C36A224C0D6CA00648277 /* Views */,
+				C02C36A124C0D6B900648277 /* Classes */,
 				C02C368B24C0D5AF00648277 /* AppDelegate.swift */,
 				C02C368D24C0D5AF00648277 /* DocumentBrowserViewController.swift */,
 				C02C368F24C0D5AF00648277 /* DocumentView.swift */,
@@ -68,6 +72,21 @@
 				C02C369B24C0D5B100648277 /* Info.plist */,
 			);
 			path = Thingz;
+			sourceTree = "<group>";
+		};
+		C02C36A124C0D6B900648277 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C02C36A324C0D76000648277 /* Thing.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		C02C36A224C0D6CA00648277 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,6 +163,7 @@
 				C02C369224C0D5AF00648277 /* Document.swift in Sources */,
 				C02C368E24C0D5AF00648277 /* DocumentBrowserViewController.swift in Sources */,
 				C02C369024C0D5AF00648277 /* DocumentView.swift in Sources */,
+				C02C36A424C0D76000648277 /* Thing.swift in Sources */,
 				C02C368C24C0D5AF00648277 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
