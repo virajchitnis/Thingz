@@ -16,7 +16,23 @@
 		C02C369A24C0D5B100648277 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C02C369824C0D5B100648277 /* LaunchScreen.storyboard */; };
 		C02C36A424C0D76000648277 /* Thing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C36A324C0D76000648277 /* Thing.swift */; };
 		C02C36A624C0DD7500648277 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C36A524C0DD7500648277 /* Location.swift */; };
+		C02C36AB24C0E97C00648277 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02C36AA24C0E97B00648277 /* SQLite.framework */; };
+		C02C36AC24C0E97C00648277 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C02C36AA24C0E97B00648277 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C02C36AD24C0E97C00648277 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C02C36AC24C0E97C00648277 /* SQLite.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C02C368824C0D5AF00648277 /* Thingz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Thingz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -30,6 +46,9 @@
 		C02C369B24C0D5B100648277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C02C36A324C0D76000648277 /* Thing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thing.swift; sourceTree = "<group>"; };
 		C02C36A524C0DD7500648277 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		C02C36A724C0E7C300648277 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		C02C36A824C0E7E600648277 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		C02C36AA24C0E97B00648277 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/iOS/SQLite.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C02C36AB24C0E97C00648277 /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,8 +66,11 @@
 		C02C367F24C0D5AF00648277 = {
 			isa = PBXGroup;
 			children = (
+				C02C36A824C0E7E600648277 /* .gitignore */,
+				C02C36A724C0E7C300648277 /* Cartfile */,
 				C02C368A24C0D5AF00648277 /* Thingz */,
 				C02C368924C0D5AF00648277 /* Products */,
+				C02C36A924C0E97B00648277 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,6 +115,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		C02C36A924C0E97B00648277 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C02C36AA24C0E97B00648277 /* SQLite.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -102,6 +133,7 @@
 				C02C368424C0D5AF00648277 /* Sources */,
 				C02C368524C0D5AF00648277 /* Frameworks */,
 				C02C368624C0D5AF00648277 /* Resources */,
+				C02C36AD24C0E97C00648277 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -314,6 +346,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2NHYU6WRMR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Thingz/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -332,6 +368,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2NHYU6WRMR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Thingz/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
