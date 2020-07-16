@@ -30,8 +30,11 @@ struct DocumentView: View {
         let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("test.thingz")
         debugPrint(path)
         let testLocation = Location(name: "Box 1", description: "The box in the attic.")
+        let testThing = Thing(name: "Something")
         if let dbFile = DatabaseFile(path: path) {
-            let rowid = testLocation.save(file: dbFile)
+            var rowid = testLocation.save(file: dbFile)
+            debugPrint(rowid as Any)
+            rowid = testThing.save(file: dbFile)
             debugPrint(rowid as Any)
         }
     }
