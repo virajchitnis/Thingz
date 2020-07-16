@@ -13,7 +13,9 @@ struct DocumentView: View {
     var dismiss: () -> Void
 
     var body: some View {
-        VStack {
+        let testLocation = Location(name: "Box 1", description: "The box in the attic.")
+        testLocation.save()
+        return VStack {
             HStack {
                 Text("File Name")
                     .foregroundColor(.secondary)
