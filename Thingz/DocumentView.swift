@@ -27,8 +27,7 @@ struct DocumentView: View {
     }
     
     func testSave() {
-        let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("test.thingz")
-        debugPrint(path)
+        let path = self.document.fileURL
         let testLocation = Location(name: "Box 1", description: "The box in the attic.")
         let testThing = Thing(name: "Something")
         if let dbFile = DatabaseFile(path: path) {
