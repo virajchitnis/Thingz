@@ -9,12 +9,13 @@
 import SwiftUI
 
 struct LocationsListView: View {
+    var fileURL: URL
     var dismiss: () -> Void
+    @State private var locations: [Location] = []
     
     var body: some View {
         NavigationView {
-            List {
-                LocationRowView()
+            List(locations, id: \.id) { location in
                 LocationRowView()
             }
             .navigationBarTitle("Locations")
@@ -25,12 +26,20 @@ struct LocationsListView: View {
                 Image(systemName: "plus")
             }
             .font(.title))
+        }.onAppear {
+            self.loadLocationsFromFile()
+        }
+    }
+    
+    func loadLocationsFromFile() {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            self.locations = Location.loadFromDatabase(file: dbFile)
         }
     }
 }
 
 struct LocationsListView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationsListView(dismiss: {})
+        return LocationsListView(fileURL: URL(fileURLWithPath: "blah"), dismiss: {})
     }
 }

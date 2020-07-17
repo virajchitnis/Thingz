@@ -13,8 +13,7 @@ struct DocumentView: View {
     var dismiss: () -> Void
 
     var body: some View {
-        self.testLoad()
-        return LocationsListView(dismiss: dismiss)
+        LocationsListView(fileURL: self.document.fileURL, dismiss: self.dismiss)
     }
     
     func testSave() {
