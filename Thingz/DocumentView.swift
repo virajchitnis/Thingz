@@ -13,7 +13,7 @@ struct DocumentView: View {
     var dismiss: () -> Void
 
     var body: some View {
-        self.testSave()
+        self.testLoad()
         return VStack {
             HStack {
                 Text("File Name")
@@ -35,6 +35,14 @@ struct DocumentView: View {
             debugPrint(rowid as Any)
             rowid = testThing.save(file: dbFile)
             debugPrint(rowid as Any)
+        }
+    }
+    
+    func testLoad() {
+        let path = self.document.fileURL
+        if let dbFile = DatabaseFile(path: path) {
+            let locations = Location.loadFromDatabase(file: dbFile)
+            debugPrint(locations)
         }
     }
 }

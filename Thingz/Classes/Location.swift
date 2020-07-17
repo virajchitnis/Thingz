@@ -16,8 +16,8 @@ class Location {
     var description: String
     var photos: [UIImage]
     
-    init(name: String, description: String = "", photos: [UIImage] = []) {
-        self.id = UUID()
+    init(id: UUID = UUID(), name: String, description: String = "", photos: [UIImage] = []) {
+        self.id = id
         self.name = name
         self.description = description
         self.photos = photos
@@ -43,5 +43,27 @@ class Location {
             debugPrint("Error saving location!")
             return nil
         }
+    }
+    
+    class func loadFromDatabase(file: DatabaseFile) -> [Location] {
+        let locations = Table("Locations")
+        let id = Expression<String>("id")
+        let name = Expression<String>("name")
+        let description = Expression<String>("description")
+        
+        var loadedLocations: [Location] = []
+        if let db = file.db {
+            do {
+                for location in try db.prepare(locations) {
+                    if let loadedId = UUID(uuidString: location[id]) {
+                        let loadedLocation = Location(id: loadedId, name: location[name], description: location[description])
+                        loadedLocations.append(loadedLocation)
+                    }
+                }
+            } catch {
+                debugPrint("No locations found")
+            }
+        }
+        return loadedLocations
     }
 }
