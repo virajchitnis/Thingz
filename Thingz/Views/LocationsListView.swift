@@ -12,6 +12,7 @@ struct LocationsListView: View {
     var fileURL: URL
     var dismiss: () -> Void
     @State private var locations: [Location] = []
+    @State private var showAddLocationPopover: Bool = false
     
     var body: some View {
         NavigationView {
@@ -25,8 +26,13 @@ struct LocationsListView: View {
             .navigationBarItems(leading: Button(action: dismiss) {
                 Image(systemName: "xmark")
             }
-            .font(.title), trailing: Button(action: {}) {
+            .font(.title), trailing: Button(action: {
+                self.showAddLocationPopover = true
+            }) {
                 Image(systemName: "plus")
+            }
+            .popover(isPresented: $showAddLocationPopover) {
+                AddLocationView()
             }
             .font(.title))
         }
