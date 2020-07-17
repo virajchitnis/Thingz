@@ -9,23 +9,13 @@
 import SwiftUI
 
 struct ThingsListView: View {
+    var things: [Thing]
+    
     var body: some View {
-        List {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("Thing 1")
-                        .font(.headline)
-                    Spacer()
-                    Text("345366566")
-                        .font(.caption)
-                        .foregroundColor(Color.gray)
-                }
-                Text("Something stored somewhere.")
-                    .font(.subheadline)
-                    .foregroundColor(Color.gray)
-            }
+        List(things, id: \.id) { thing in
+            ThingRowView(thing: thing)
         }
-        .navigationBarTitle("Things", displayMode: .inline)
+        .navigationBarTitle("Things")
         .navigationBarItems(trailing: Button(action: {}) {
             Image(systemName: "plus")
         }
@@ -35,6 +25,6 @@ struct ThingsListView: View {
 
 struct ThingsListView_Previews: PreviewProvider {
     static var previews: some View {
-        ThingsListView()
+        ThingsListView(things: [Thing(name: "Thing 1", description: "Blah blah", barcode: "345345435", locationId: UUID())])
     }
 }

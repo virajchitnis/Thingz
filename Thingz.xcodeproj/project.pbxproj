@@ -24,6 +24,7 @@
 		C0BA216B24C1CEC500648277 /* LocationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216A24C1CEC500648277 /* LocationRowView.swift */; };
 		C0BA216D24C1DD9600648277 /* AddLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216C24C1DD9600648277 /* AddLocationView.swift */; };
 		C0BA216F24C2098500648277 /* ThingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216E24C2098500648277 /* ThingsListView.swift */; };
+		C0BA217124C23F6200648277 /* ThingRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA217024C23F6200648277 /* ThingRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +62,7 @@
 		C0BA216A24C1CEC500648277 /* LocationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRowView.swift; sourceTree = "<group>"; };
 		C0BA216C24C1DD9600648277 /* AddLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationView.swift; sourceTree = "<group>"; };
 		C0BA216E24C2098500648277 /* ThingsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsListView.swift; sourceTree = "<group>"; };
+		C0BA217024C23F6200648277 /* ThingRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				C0BA216824C1C75500648277 /* LocationsListView.swift */,
 				C0BA216A24C1CEC500648277 /* LocationRowView.swift */,
 				C0BA216E24C2098500648277 /* ThingsListView.swift */,
+				C0BA217024C23F6200648277 /* ThingRowView.swift */,
 				C0BA216C24C1DD9600648277 /* AddLocationView.swift */,
 			);
 			path = Views;
@@ -232,6 +235,7 @@
 				C0BA216D24C1DD9600648277 /* AddLocationView.swift in Sources */,
 				C02C368C24C0D5AF00648277 /* AppDelegate.swift in Sources */,
 				C0BA216F24C2098500648277 /* ThingsListView.swift in Sources */,
+				C0BA217124C23F6200648277 /* ThingRowView.swift in Sources */,
 				C02C36AF24C10AF900648277 /* DatabaseFile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
