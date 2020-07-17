@@ -25,6 +25,14 @@ struct AddLocationView: View {
                     Text("Save")
                 }
             }
+            HStack {
+                Spacer()
+                Text("New Location")
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding(.top)
+                Spacer()
+            }
             Divider()
             TextField("Name", text: $locationName)
                 .padding(.top)
