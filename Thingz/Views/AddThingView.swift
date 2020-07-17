@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct AddThingView: View {
+    var location: Location
     var callback: (Thing) -> Bool
     @Environment(\.presentationMode) var presentation
     @State private var thingName: String = ""
@@ -44,7 +45,7 @@ struct AddThingView: View {
     
     func saveThing() {
         if !self.thingName.isEmpty {
-            let newThing = Thing(name: self.thingName, description: self.thingDesc, locationId: UUID())
+            let newThing = Thing(name: self.thingName, description: self.thingDesc, locationId: self.location.id)
             if callback(newThing) {
                 self.dismissView()
             }
@@ -58,7 +59,7 @@ struct AddThingView: View {
 
 struct AddThingView_Previews: PreviewProvider {
     static var previews: some View {
-        AddThingView(callback: { thing in
+        AddThingView(location: Location(name: "Blah"), callback: { thing in
             return true
         })
     }
