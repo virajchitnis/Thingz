@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct AddLocationView: View {
+    var callback: (Location) -> Bool
     @Environment(\.presentationMode) var presentation
     @State private var locationName: String = ""
     @State private var locationDesc: String = ""
@@ -34,7 +35,12 @@ struct AddLocationView: View {
     }
     
     func saveLocation() {
-        self.dismissView()
+        if !self.locationName.isEmpty {
+            let newLocation = Location(name: self.locationName, description: self.locationDesc)
+            if callback(newLocation) {
+                self.dismissView()
+            }
+        }
     }
     
     func dismissView() {
@@ -44,6 +50,8 @@ struct AddLocationView: View {
 
 struct AddLocationView_Previews: PreviewProvider {
     static var previews: some View {
-        AddLocationView()
+        AddLocationView(callback: { location in
+            return true
+        })
     }
 }

@@ -32,7 +32,7 @@ struct LocationsListView: View {
                 Image(systemName: "plus")
             }
             .popover(isPresented: $showAddLocationPopover) {
-                AddLocationView()
+                AddLocationView(callback: self.save)
             }
             .font(.title))
         }
@@ -42,6 +42,16 @@ struct LocationsListView: View {
         if let dbFile = DatabaseFile(path: self.fileURL) {
             self.locations = Location.loadFromDatabase(file: dbFile)
         }
+    }
+    
+    func save(newLocation: Location) -> Bool {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            if newLocation.save(file: dbFile) != nil {
+                self.locations.append(newLocation)
+                return true
+            }
+        }
+        return false
     }
 }
 
