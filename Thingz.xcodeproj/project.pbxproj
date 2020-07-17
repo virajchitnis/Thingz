@@ -25,6 +25,7 @@
 		C0BA216D24C1DD9600648277 /* AddLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216C24C1DD9600648277 /* AddLocationView.swift */; };
 		C0BA216F24C2098500648277 /* ThingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216E24C2098500648277 /* ThingsListView.swift */; };
 		C0BA217124C23F6200648277 /* ThingRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA217024C23F6200648277 /* ThingRowView.swift */; };
+		C0BA217324C241E800648277 /* AddThingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA217224C241E800648277 /* AddThingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +64,7 @@
 		C0BA216C24C1DD9600648277 /* AddLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationView.swift; sourceTree = "<group>"; };
 		C0BA216E24C2098500648277 /* ThingsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsListView.swift; sourceTree = "<group>"; };
 		C0BA217024C23F6200648277 /* ThingRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingRowView.swift; sourceTree = "<group>"; };
+		C0BA217224C241E800648277 /* AddThingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddThingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				C0BA216E24C2098500648277 /* ThingsListView.swift */,
 				C0BA217024C23F6200648277 /* ThingRowView.swift */,
 				C0BA216C24C1DD9600648277 /* AddLocationView.swift */,
+				C0BA217224C241E800648277 /* AddThingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				C0BA216F24C2098500648277 /* ThingsListView.swift in Sources */,
 				C0BA217124C23F6200648277 /* ThingRowView.swift in Sources */,
 				C02C36AF24C10AF900648277 /* DatabaseFile.swift in Sources */,
+				C0BA217324C241E800648277 /* AddThingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

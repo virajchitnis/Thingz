@@ -10,16 +10,26 @@ import SwiftUI
 
 struct ThingsListView: View {
     var things: [Thing]
+    @State private var showAddThingPopover: Bool = false
     
     var body: some View {
         List(things, id: \.id) { thing in
             ThingRowView(thing: thing)
         }
         .navigationBarTitle("Things")
-        .navigationBarItems(trailing: Button(action: {}) {
+        .navigationBarItems(trailing: Button(action: {
+            self.showAddThingPopover = true
+        }) {
             Image(systemName: "plus")
         }
+        .popover(isPresented: $showAddThingPopover) {
+            AddThingView(callback: self.save)
+        }
         .font(.title))
+    }
+    
+    func save(newThing: Thing) -> Bool {
+        return true
     }
 }
 
