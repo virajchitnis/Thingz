@@ -9,12 +9,14 @@
 import SwiftUI
 
 struct LocationRowView: View {
+    var location: Location
+    
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("Box 1")
+                Text("\(self.location.name)")
                     .font(.headline)
-                Text("The box in the attic.")
+                Text("\(self.location.description)")
                     .font(.subheadline)
                     .foregroundColor(Color.gray)
             }
@@ -28,6 +30,6 @@ struct LocationRowView: View {
 
 struct LocationRowView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationRowView()
+        LocationRowView(location: Location(name: "Box 1", description: "The box in the attic."))
     }
 }

@@ -16,7 +16,7 @@ struct LocationsListView: View {
     var body: some View {
         NavigationView {
             List(locations, id: \.id) { location in
-                LocationRowView()
+                LocationRowView(location: location)
             }
             .navigationBarTitle("Locations")
             .navigationBarItems(leading: Button(action: dismiss) {
