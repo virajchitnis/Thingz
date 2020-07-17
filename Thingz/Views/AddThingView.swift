@@ -14,6 +14,7 @@ struct AddThingView: View {
     @Environment(\.presentationMode) var presentation
     @State private var thingName: String = ""
     @State private var thingDesc: String = ""
+    @State private var thingBarcode: String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -39,13 +40,17 @@ struct AddThingView: View {
                 .padding(.top)
             TextField("Description", text: $thingDesc)
                 .padding(.top)
+            TextField("Barcode", text: $thingBarcode)
+                .padding(.top)
+                .autocapitalization(.none)
+                .keyboardType(.numberPad)
             Spacer()
         }.padding()
     }
     
     func saveThing() {
         if !self.thingName.isEmpty {
-            let newThing = Thing(name: self.thingName, description: self.thingDesc, locationId: self.location.id)
+            let newThing = Thing(name: self.thingName, description: self.thingDesc, barcode: self.thingBarcode, locationId: self.location.id)
             if callback(newThing) {
                 self.dismissView()
             }

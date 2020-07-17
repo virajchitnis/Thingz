@@ -71,7 +71,7 @@ class Location {
             do {
                 for thing in try db.prepare(TABLE_THINGS.filter(COLUMN_THING_LOCID == self.id.uuidString)) {
                     if let loadedId = UUID(uuidString: thing[COLUMN_THING_ID]) {
-                        let loadedThing = Thing(id: loadedId, name: thing[COLUMN_THING_NAME], description: thing[COLUMN_THING_DESC], locationId: self.id)
+                        let loadedThing = Thing(id: loadedId, name: thing[COLUMN_THING_NAME], description: thing[COLUMN_THING_DESC], barcode: thing[COLUMN_THING_BARCODE], locationId: self.id)
                         loadedThings.append(loadedThing)
                     }
                 }
