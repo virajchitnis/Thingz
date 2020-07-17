@@ -26,6 +26,8 @@
 		C0BA216F24C2098500648277 /* ThingsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216E24C2098500648277 /* ThingsListView.swift */; };
 		C0BA217124C23F6200648277 /* ThingRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA217024C23F6200648277 /* ThingRowView.swift */; };
 		C0BA217324C241E800648277 /* AddThingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA217224C241E800648277 /* AddThingView.swift */; };
+		C0BA217524C2550900648277 /* BarcodeScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0BA217424C2550900648277 /* BarcodeScanner.framework */; };
+		C0BA217624C2550900648277 /* BarcodeScanner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0BA217424C2550900648277 /* BarcodeScanner.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +37,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C0BA217624C2550900648277 /* BarcodeScanner.framework in Embed Frameworks */,
 				C02C36AC24C0E97C00648277 /* SQLite.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -65,6 +68,7 @@
 		C0BA216E24C2098500648277 /* ThingsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsListView.swift; sourceTree = "<group>"; };
 		C0BA217024C23F6200648277 /* ThingRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingRowView.swift; sourceTree = "<group>"; };
 		C0BA217224C241E800648277 /* AddThingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddThingView.swift; sourceTree = "<group>"; };
+		C0BA217424C2550900648277 /* BarcodeScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BarcodeScanner.framework; path = Carthage/Build/iOS/BarcodeScanner.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0BA217524C2550900648277 /* BarcodeScanner.framework in Frameworks */,
 				C02C36AB24C0E97C00648277 /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,6 +147,7 @@
 		C02C36A924C0E97B00648277 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C0BA217424C2550900648277 /* BarcodeScanner.framework */,
 				C02C36AA24C0E97B00648277 /* SQLite.framework */,
 			);
 			name = Frameworks;
