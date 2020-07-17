@@ -21,6 +21,7 @@
 		C02C36AF24C10AF900648277 /* DatabaseFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02C36AE24C10AF900648277 /* DatabaseFile.swift */; };
 		C02C36B224C11A2700648277 /* Untitled.thingz in Resources */ = {isa = PBXBuildFile; fileRef = C02C36B124C115E000648277 /* Untitled.thingz */; };
 		C0BA216924C1C75500648277 /* LocationsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216824C1C75500648277 /* LocationsListView.swift */; };
+		C0BA216B24C1CEC500648277 /* LocationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA216A24C1CEC500648277 /* LocationRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,7 @@
 		C02C36AE24C10AF900648277 /* DatabaseFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseFile.swift; sourceTree = "<group>"; };
 		C02C36B124C115E000648277 /* Untitled.thingz */ = {isa = PBXFileReference; lastKnownFileType = text; path = Untitled.thingz; sourceTree = "<group>"; };
 		C0BA216824C1C75500648277 /* LocationsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsListView.swift; sourceTree = "<group>"; };
+		C0BA216A24C1CEC500648277 /* LocationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 			children = (
 				C02C368F24C0D5AF00648277 /* DocumentView.swift */,
 				C0BA216824C1C75500648277 /* LocationsListView.swift */,
+				C0BA216A24C1CEC500648277 /* LocationRowView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 				C02C36A424C0D76000648277 /* Thing.swift in Sources */,
 				C02C36A624C0DD7500648277 /* Location.swift in Sources */,
 				C0BA216924C1C75500648277 /* LocationsListView.swift in Sources */,
+				C0BA216B24C1CEC500648277 /* LocationRowView.swift in Sources */,
 				C02C368C24C0D5AF00648277 /* AppDelegate.swift in Sources */,
 				C02C36AF24C10AF900648277 /* DatabaseFile.swift in Sources */,
 			);
