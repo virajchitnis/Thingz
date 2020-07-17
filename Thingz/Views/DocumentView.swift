@@ -14,16 +14,7 @@ struct DocumentView: View {
 
     var body: some View {
         self.testLoad()
-        return VStack {
-            HStack {
-                Text("File Name")
-                    .foregroundColor(.secondary)
-
-                Text(document.fileURL.lastPathComponent)
-            }
-
-            Button("Done", action: dismiss)
-        }
+        return LocationsListView(dismiss: dismiss)
     }
     
     func testSave() {
