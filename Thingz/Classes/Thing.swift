@@ -10,6 +10,12 @@ import Foundation
 import UIKit
 import SQLite
 
+let TABLE_THINGS = Table("Things")
+let COLUMN_THING_ID = Expression<String>("id")
+let COLUMN_THING_NAME = Expression<String>("name")
+let COLUMN_THING_DESC = Expression<String>("description")
+let COLUMN_THING_BARCODE = Expression<String>("barcode")
+
 class Thing {
     var id: UUID
     var name: String
@@ -27,20 +33,14 @@ class Thing {
     
     func save(file: DatabaseFile) -> Int64? {
         do {
-            let things = Table("Things")
-            let id = Expression<String>("id")
-            let name = Expression<String>("name")
-            let description = Expression<String>("description")
-            let barcode = Expression<String>("barcode")
-            
-            try file.db?.run(things.create(ifNotExists: true) { t in
-                t.column(id, primaryKey: true)
-                t.column(name)
-                t.column(description)
-                t.column(barcode)
+            try file.db?.run(TABLE_THINGS.create(ifNotExists: true) { t in
+                t.column(COLUMN_THING_ID, primaryKey: true)
+                t.column(COLUMN_THING_NAME)
+                t.column(COLUMN_THING_DESC)
+                t.column(COLUMN_THING_BARCODE)
             })
             
-            let insert = things.insert(id <- self.id.uuidString, name <- self.name, description <- self.description, barcode <- self.barcode)
+            let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_BARCODE <- self.barcode)
             let rowid = try file.db?.run(insert)
             return rowid
         } catch {
