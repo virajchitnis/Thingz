@@ -19,12 +19,14 @@ class Location {
     var id: UUID
     var name: String
     var description: String
+    var things: [Thing]
     var photos: [UIImage]
     
-    init(id: UUID = UUID(), name: String, description: String = "", photos: [UIImage] = []) {
+    init(id: UUID = UUID(), name: String, description: String = "", things: [Thing] = [], photos: [UIImage] = []) {
         self.id = id
         self.name = name
         self.description = description
+        self.things = things
         self.photos = photos
     }
     
@@ -52,6 +54,7 @@ class Location {
                 for location in try db.prepare(TABLE_LOCATIONS) {
                     if let loadedId = UUID(uuidString: location[COLUMN_LOCATION_ID]) {
                         let loadedLocation = Location(id: loadedId, name: location[COLUMN_LOCATION_NAME], description: location[COLUMN_LOCATION_DESC])
+                        loadedLocation.loadAllThings(from: file)
                         loadedLocations.append(loadedLocation)
                     }
                 }
@@ -60,5 +63,22 @@ class Location {
             }
         }
         return loadedLocations
+    }
+    
+    func loadAllThings(from file: DatabaseFile) {
+        var loadedThings: [Thing] = []
+        if let db = file.db {
+            do {
+                for thing in try db.prepare(TABLE_THINGS.filter(COLUMN_THING_LOCID == self.id.uuidString)) {
+                    if let loadedId = UUID(uuidString: thing[COLUMN_THING_ID]) {
+                        let loadedThing = Thing(id: loadedId, name: thing[COLUMN_THING_NAME], description: thing[COLUMN_THING_DESC], locationId: self.id)
+                        loadedThings.append(loadedThing)
+                    }
+                }
+            } catch {
+                debugPrint("No things found")
+            }
+        }
+        self.things = loadedThings
     }
 }

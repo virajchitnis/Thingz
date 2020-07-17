@@ -19,7 +19,7 @@ struct DocumentView: View {
     func testSave() {
         let path = self.document.fileURL
         let testLocation = Location(name: "Box 1", description: "The box in the attic.")
-        let testThing = Thing(name: "Something")
+        let testThing = Thing(name: "Something", locationId: testLocation.id)
         if let dbFile = DatabaseFile(path: path) {
             var rowid = testLocation.save(file: dbFile)
             debugPrint(rowid as Any)
@@ -32,9 +32,7 @@ struct DocumentView: View {
         let path = self.document.fileURL
         if let dbFile = DatabaseFile(path: path) {
             let locations = Location.loadFromDatabase(file: dbFile)
-            let things = Thing.loadFromDatabase(file: dbFile)
             debugPrint(locations)
-            debugPrint(things)
         }
     }
 }

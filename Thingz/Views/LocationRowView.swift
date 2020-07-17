@@ -21,7 +21,7 @@ struct LocationRowView: View {
                     .foregroundColor(Color.gray)
             }
             Spacer()
-            Text("25 things")
+            Text("\(self.location.things.count) things")
                 .font(.body)
                 .multilineTextAlignment(.trailing)
         }
