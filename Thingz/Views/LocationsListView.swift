@@ -18,6 +18,9 @@ struct LocationsListView: View {
             List(locations, id: \.id) { location in
                 LocationRowView(location: location)
             }
+            .onAppear {
+                self.loadLocationsFromFile()
+            }
             .navigationBarTitle("Locations")
             .navigationBarItems(leading: Button(action: dismiss) {
                 Image(systemName: "xmark")
@@ -26,8 +29,6 @@ struct LocationsListView: View {
                 Image(systemName: "plus")
             }
             .font(.title))
-        }.onAppear {
-            self.loadLocationsFromFile()
         }
     }
     
