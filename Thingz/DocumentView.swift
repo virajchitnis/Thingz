@@ -42,7 +42,9 @@ struct DocumentView: View {
         let path = self.document.fileURL
         if let dbFile = DatabaseFile(path: path) {
             let locations = Location.loadFromDatabase(file: dbFile)
+            let things = Thing.loadFromDatabase(file: dbFile)
             debugPrint(locations)
+            debugPrint(things)
         }
     }
 }

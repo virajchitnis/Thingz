@@ -48,4 +48,21 @@ class Thing {
             return nil
         }
     }
+    
+    class func loadFromDatabase(file: DatabaseFile) -> [Thing] {
+        var loadedThings: [Thing] = []
+        if let db = file.db {
+            do {
+                for thing in try db.prepare(TABLE_THINGS) {
+                    if let loadedId = UUID(uuidString: thing[COLUMN_THING_ID]) {
+                        let loadedThing = Thing(id: loadedId, name: thing[COLUMN_THING_NAME], description: thing[COLUMN_THING_DESC])
+                        loadedThings.append(loadedThing)
+                    }
+                }
+            } catch {
+                debugPrint("No things found")
+            }
+        }
+        return loadedThings
+    }
 }
