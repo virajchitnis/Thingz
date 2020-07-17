@@ -17,7 +17,9 @@ struct LocationsListView: View {
     var body: some View {
         NavigationView {
             List(locations, id: \.id) { location in
-                LocationRowView(location: location)
+                NavigationLink(destination: ThingsListView()) {
+                    LocationRowView(location: location)
+                }
             }
             .onAppear {
                 self.loadLocationsFromFile()
