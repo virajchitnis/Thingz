@@ -10,12 +10,24 @@ import SwiftUI
 
 struct ThingsListView: View {
     var fileURL: URL
-    var location: Location
+    @ObservedObject var location: Location
     @State private var showAddThingPopover: Bool = false
     
     var body: some View {
         List(location.things, id: \.id) { thing in
             ThingRowView(thing: thing)
+            .contextMenu {
+                Button(action: {
+                    if self.delete(thing: thing) {
+                        self.location.things.removeAll(where: { $0.id == thing.id })
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Delete")
+                    }
+                }
+            }
         }
         .navigationBarTitle("Things")
         .navigationBarItems(trailing: Button(action: {
@@ -35,6 +47,13 @@ struct ThingsListView: View {
                 self.location.things.append(newThing)
                 return true
             }
+        }
+        return false
+    }
+    
+    func delete(thing: Thing) -> Bool {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            return Thing.delete(thing: thing, from: dbFile)
         }
         return false
     }

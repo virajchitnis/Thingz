@@ -15,11 +15,11 @@ let COLUMN_LOCATION_ID = Expression<String>("id")
 let COLUMN_LOCATION_NAME = Expression<String>("name")
 let COLUMN_LOCATION_DESC = Expression<String>("description")
 
-class Location {
+class Location: ObservableObject {
     var id: UUID
     var name: String
     var description: String
-    var things: [Thing]
+    @Published var things: [Thing]
     var photos: [UIImage]
     
     init(id: UUID = UUID(), name: String, description: String = "", things: [Thing] = [], photos: [UIImage] = []) {

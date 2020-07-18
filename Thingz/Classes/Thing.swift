@@ -52,4 +52,15 @@ class Thing {
             return nil
         }
     }
+    
+    class func delete(thing: Thing, from file: DatabaseFile) -> Bool {
+        let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
+        do {
+            try file.db?.run(thisThing.delete())
+            return true
+        } catch {
+            debugPrint("Error deleting thing!")
+            return false
+        }
+    }
 }
