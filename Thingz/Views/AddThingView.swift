@@ -12,6 +12,7 @@ struct AddThingView: View {
     var location: Location
     var callback: (Thing) -> Bool
     @Environment(\.presentationMode) var presentation
+    @State private var showBarcodeScanner: Bool = false
     @State private var thingName: String = ""
     @State private var thingDesc: String = ""
     @State private var thingBarcode: String = ""
@@ -44,6 +45,13 @@ struct AddThingView: View {
                 .padding(.top)
                 .autocapitalization(.none)
                 .keyboardType(.numberPad)
+            Button(action: {
+                self.showBarcodeScanner = true
+            }) {
+                Text("Scan Barcode")
+            }.sheet(isPresented: $showBarcodeScanner, content: {
+                BarcodeScannerView()
+            })
             Spacer()
         }.padding()
     }
