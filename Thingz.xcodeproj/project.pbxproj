@@ -71,6 +71,7 @@
 		C0BA217224C241E800648277 /* AddThingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddThingView.swift; sourceTree = "<group>"; };
 		C0BA217424C2550900648277 /* BarcodeScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BarcodeScanner.framework; path = Carthage/Build/iOS/BarcodeScanner.framework; sourceTree = "<group>"; };
 		C0BA217724C3105300648277 /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
+		C0BA217924C325C300648277 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +90,7 @@
 		C02C367F24C0D5AF00648277 = {
 			isa = PBXGroup;
 			children = (
+				C0BA217924C325C300648277 /* README.md */,
 				C02C36A824C0E7E600648277 /* .gitignore */,
 				C02C36A724C0E7C300648277 /* Cartfile */,
 				C02C368A24C0D5AF00648277 /* Thingz */,
