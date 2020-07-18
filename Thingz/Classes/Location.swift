@@ -81,4 +81,26 @@ class Location: ObservableObject {
         }
         self.things = loadedThings
     }
+    
+    class func delete(location: Location, from file: DatabaseFile) -> Bool {
+        let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == location.id.uuidString)
+        
+        var success = true
+        for thing in location.things {
+            if !Thing.delete(thing: thing, from: file) {
+                success = false
+            }
+        }
+        
+        if success {
+            do {
+                try file.db?.run(thisLocation.delete())
+                return true
+            } catch {
+                debugPrint("Error deleting location!")
+                return false
+            }
+        }
+        return false
+    }
 }

@@ -19,6 +19,18 @@ struct LocationsListView: View {
             List(locations, id: \.id) { location in
                 NavigationLink(destination: ThingsListView(fileURL: self.fileURL, location: location)) {
                     LocationRowView(location: location)
+                    .contextMenu {
+                        Button(action: {
+                            if self.delete(location: location) {
+                                self.locations.removeAll(where: { $0.id == location.id })
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "trash")
+                                Text("Delete")
+                            }
+                        }
+                    }
                 }
             }
             .onAppear {
@@ -52,6 +64,13 @@ struct LocationsListView: View {
                 self.locations.append(newLocation)
                 return true
             }
+        }
+        return false
+    }
+    
+    func delete(location: Location) -> Bool {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            return Location.delete(location: location, from: dbFile)
         }
         return false
     }
