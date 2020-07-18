@@ -12,7 +12,7 @@ import BarcodeScanner
 
 struct BarcodeScannerView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentation
-    @Binding var code: String?
+    var callback: (String) -> Void
     
     func makeUIViewController(context: Context) -> BarcodeScannerViewController {
         let scanner = BarcodeScannerViewController()
@@ -20,7 +20,12 @@ struct BarcodeScannerView: UIViewControllerRepresentable {
         scanner.errorDelegate = context.coordinator
         scanner.dismissalDelegate = context.coordinator
         scanner.headerViewController.titleLabel.text = "Barcode Scanner"
+        scanner.headerViewController.titleLabel.textColor = .gray
         scanner.headerViewController.closeButton.setTitle("Close", for: .normal)
+        scanner.headerViewController.closeButton.tintColor = .red
+        scanner.messageViewController.messages.scanningText = "Place the barcode within the window to scan."
+        scanner.messageViewController.messages.processingText = "Processing..."
+        scanner.isOneTimeSearch = true
         return scanner
     }
     
@@ -42,9 +47,8 @@ extension BarcodeScannerView {
         }
         
         func scanner(_ controller: BarcodeScannerViewController, didCaptureCode code: String, type: String) {
-            debugPrint(code)
-            parent.code = code
-            controller.reset(animated: true)
+            parent.callback(code)
+            parent.presentation.wrappedValue.dismiss()
         }
         
         func scannerDidDismiss(_ controller: BarcodeScannerViewController) {
