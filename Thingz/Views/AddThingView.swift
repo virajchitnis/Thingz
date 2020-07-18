@@ -15,7 +15,7 @@ struct AddThingView: View {
     @State private var showBarcodeScanner: Bool = false
     @State private var thingName: String = ""
     @State private var thingDesc: String = ""
-    @State private var thingBarcode: String = ""
+    @State private var thingBarcode: String?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -41,24 +41,20 @@ struct AddThingView: View {
                 .padding(.top)
             TextField("Description", text: $thingDesc)
                 .padding(.top)
-            TextField("Barcode", text: $thingBarcode)
-                .padding(.top)
-                .autocapitalization(.none)
-                .keyboardType(.numberPad)
             Button(action: {
                 self.showBarcodeScanner = true
             }) {
                 Text("Scan Barcode")
             }.sheet(isPresented: $showBarcodeScanner, content: {
-                BarcodeScannerView()
+                BarcodeScannerView(code: self.$thingBarcode)
             })
             Spacer()
         }.padding()
     }
     
     func saveThing() {
-        if !self.thingName.isEmpty {
-            let newThing = Thing(name: self.thingName, description: self.thingDesc, barcode: self.thingBarcode, locationId: self.location.id)
+        if !self.thingName.isEmpty, let barcode = self.thingBarcode {
+            let newThing = Thing(name: self.thingName, description: self.thingDesc, barcode: barcode, locationId: self.location.id)
             if callback(newThing) {
                 self.dismissView()
             }
