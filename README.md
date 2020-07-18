@@ -13,6 +13,15 @@ Features
 - Separate tab for searching for and finding things along with their locations. (incomplete)
 - Add photos to locations and things. (incomplete)
 
+Build
+------
+
+1. Clone repository to your Mac.
+2. Open a terminal application (Terminal, iTerm2, etc) and `cd` to the project repository.
+3. Fetch and build dependencies using Carthage: `carthage update`.
+4. Open the project in Xcode.
+4. Build and run.
+
 Acknowledgments
 ---------------------
 
