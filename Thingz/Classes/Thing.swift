@@ -14,6 +14,7 @@ let TABLE_THINGS = Table("Things")
 let COLUMN_THING_ID = Expression<String>("id")
 let COLUMN_THING_NAME = Expression<String>("name")
 let COLUMN_THING_DESC = Expression<String>("description")
+let COLUMN_THING_QUANT = Expression<Int64>("quantity")
 let COLUMN_THING_BARCODE = Expression<String>("barcode")
 let COLUMN_THING_LOCID = Expression<String>("location_id")
 
@@ -21,14 +22,16 @@ class Thing {
     var id: UUID
     var name: String
     var description: String
+    var quantity: Int
     var barcode: String
     var locationId: UUID
     var photos: [UIImage]
     
-    init(id: UUID = UUID(), name: String, description: String = "", barcode: String = "", locationId: UUID, photos: [UIImage] = []) {
+    init(id: UUID = UUID(), name: String, description: String = "", quantity: Int = 1, barcode: String = "", locationId: UUID, photos: [UIImage] = []) {
         self.id = id
         self.name = name
         self.description = description
+        self.quantity = quantity
         self.barcode = barcode
         self.locationId = locationId
         self.photos = photos
@@ -40,11 +43,12 @@ class Thing {
                 t.column(COLUMN_THING_ID, primaryKey: true)
                 t.column(COLUMN_THING_NAME)
                 t.column(COLUMN_THING_DESC)
+                t.column(COLUMN_THING_QUANT)
                 t.column(COLUMN_THING_BARCODE)
                 t.column(COLUMN_THING_LOCID)
             })
             
-            let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
+            let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
             let rowid = try file.db?.run(insert)
             return rowid
         } catch {

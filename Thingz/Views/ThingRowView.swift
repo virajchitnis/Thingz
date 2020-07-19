@@ -21,9 +21,13 @@ struct ThingRowView: View {
                     .font(.caption)
                     .foregroundColor(Color.gray)
             }
-            Text("\(self.thing.description)")
-                .font(.subheadline)
-                .foregroundColor(Color.gray)
+            HStack {
+                Text("\(self.thing.description)")
+                    .font(.subheadline)
+                    .foregroundColor(Color.gray)
+                Spacer()
+                Text("\(self.thing.quantity)")
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ struct AddThingView: View {
     @State private var showBarcodeScanner: Bool = false
     @State private var thingName: String = ""
     @State private var thingDesc: String = ""
+    @State private var thingQuantity: Int = 1
     @State private var thingBarcode: String = ""
     
     var body: some View {
@@ -41,6 +42,9 @@ struct AddThingView: View {
                 .padding(.top)
             TextField("Description", text: $thingDesc)
                 .padding(.top)
+            Stepper(value: $thingQuantity, in: 1...1000) {
+                Text("\(self.thingQuantity)")
+            }
             HStack {
                 TextField("Barcode", text: $thingBarcode)
                     .disabled(true)
@@ -58,7 +62,7 @@ struct AddThingView: View {
     
     func saveThing() {
         if !self.thingName.isEmpty {
-            let newThing = Thing(name: self.thingName, description: self.thingDesc, barcode: self.thingBarcode, locationId: self.location.id)
+            let newThing = Thing(name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: self.location.id)
             if callback(newThing) {
                 self.dismissView()
             }
