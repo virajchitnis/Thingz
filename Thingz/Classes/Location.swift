@@ -88,6 +88,7 @@ class Location: ObservableObject {
                 for thing in try db.prepare(TABLE_THINGS.filter(COLUMN_THING_LOCID == self.id.uuidString)) {
                     if let loadedId = UUID(uuidString: thing[COLUMN_THING_ID]) {
                         let loadedThing = Thing(id: loadedId, name: thing[COLUMN_THING_NAME], description: thing[COLUMN_THING_DESC], quantity: Int(thing[COLUMN_THING_QUANT]), barcode: thing[COLUMN_THING_BARCODE], locationId: self.id)
+                        loadedThing.photos = UIImage.loadAllPhotos(for: loadedThing.id, from: file)
                         loadedThings.append(loadedThing)
                     }
                 }

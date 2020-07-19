@@ -50,7 +50,18 @@ class Thing {
             
             let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
             let rowid = try file.db?.run(insert)
-            return rowid
+            
+            var success = true
+            for photo in self.photos {
+                if photo.save(to: file, withOwner: self.id) == nil {
+                    success = false
+                }
+            }
+            
+            if success {
+                return rowid
+            }
+            return nil
         } catch {
             debugPrint("Error saving location!")
             return nil

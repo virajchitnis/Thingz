@@ -15,10 +15,13 @@ struct AddThingView: View {
     @Environment(\.presentationMode) var presentation
     @State private var title: String = "New Thing"
     @State private var showBarcodeScanner: Bool = false
+    @State private var showCameraView: Bool = false
+    @State private var showImagePickerView: Bool = false
     @State private var thingName: String = ""
     @State private var thingDesc: String = ""
     @State private var thingQuantity: Int = 1
     @State private var thingBarcode: String = ""
+    @State private var images: [UIImage] = []
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -58,6 +61,40 @@ struct AddThingView: View {
                     BarcodeScannerView(callback: self.barcodeScanned)
                 })
             }.padding(.top)
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.showCameraView = true
+                }) {
+                    Text("Take Photo")
+                }
+                .sheet(isPresented: $showCameraView, content: {
+                    ImagePickerView(pickerType: .camera, callback: self.imageSelected)
+                })
+                .padding(.trailing)
+                Button(action: {
+                    self.showImagePickerView = true
+                }) {
+                    Text("Select Photo")
+                }
+                .sheet(isPresented: $showImagePickerView, content: {
+                    ImagePickerView(pickerType: .photoLibrary, callback: self.imageSelected)
+                })
+                .padding(.leading)
+                Spacer()
+            }.padding(.top)
+            VStack {
+                GeometryReader { geo in
+                    ScrollView {
+                        ForEach(self.images, id: \.self) { image in
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: geo.size.width)
+                        }
+                    }
+                }
+            }
             Spacer()
         }
             .padding()
@@ -73,21 +110,26 @@ struct AddThingView: View {
             self.thingDesc = thing.description
             self.thingQuantity = thing.quantity
             self.thingBarcode = thing.barcode
+            self.images = thing.photos
         }
     }
     
     func saveThing() {
         if let thing = self.thing, !self.thingName.isEmpty {
-            let updatedThing = Thing(id: thing.id, name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: thing.locationId)
+            let updatedThing = Thing(id: thing.id, name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: thing.locationId, photos: self.images)
             if callback(updatedThing) {
                 self.dismissView()
             }
         } else if !self.thingName.isEmpty {
-            let newThing = Thing(name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: self.location.id)
+            let newThing = Thing(name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: self.location.id, photos: self.images)
             if callback(newThing) {
                 self.dismissView()
             }
         }
+    }
+    
+    func imageSelected(image: UIImage) {
+        self.images.append(image)
     }
     
     func barcodeScanned(barcode: String) {
