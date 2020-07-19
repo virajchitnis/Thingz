@@ -64,7 +64,9 @@ struct LocationsListView: View {
     
     func loadLocationsFromFile() {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            self.locations = Location.loadFromDatabase(file: dbFile)
+            Location.read(from: dbFile, completionHandler: { locations in
+                self.locations = locations
+            })
         }
     }
     

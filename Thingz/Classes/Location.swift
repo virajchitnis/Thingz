@@ -62,7 +62,7 @@ class Location: ObservableObject {
         }
     }
     
-    class func loadFromDatabase(file: DatabaseFile) -> [Location] {
+    class func read(from file: DatabaseFile, completionHandler: ([Location]) -> Void) {
         var loadedLocations: [Location] = []
         if let db = file.db {
             do {
@@ -74,11 +74,11 @@ class Location: ObservableObject {
                         loadedLocations.append(loadedLocation)
                     }
                 }
+                completionHandler(loadedLocations)
             } catch {
-                debugPrint("No locations found")
+                print("Unexpected error: \(error).")
             }
         }
-        return loadedLocations
     }
     
     func loadAllThings(from file: DatabaseFile) {
