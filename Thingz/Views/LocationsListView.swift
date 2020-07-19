@@ -87,9 +87,11 @@ struct LocationsListView: View {
     
     func save(newLocation: Location) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            if newLocation.save(file: dbFile) != nil {
-                self.locations.append(newLocation)
-            }
+            newLocation.save(to: dbFile, completionHandler: { (rowid, error) in
+                if error == nil {
+                    self.locations.append(newLocation)
+                }
+            })
         }
     }
     

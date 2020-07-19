@@ -33,32 +33,37 @@ class Location: ObservableObject {
         self.photos = photos
     }
     
-    func save(file: DatabaseFile) -> Int64? {
-        do {
-            try file.db?.run(TABLE_LOCATIONS.create(ifNotExists: true) { t in
-                t.column(COLUMN_LOCATION_ID, primaryKey: true)
-                t.column(COLUMN_LOCATION_NAME, unique: true)
-                t.column(COLUMN_LOCATION_DESC)
-                t.column(COLUMN_LOCATION_BARCODE)
-            })
-            
-            let insert = TABLE_LOCATIONS.insert(COLUMN_LOCATION_ID <- self.id.uuidString, COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode)
-            let rowid = try file.db?.run(insert)
-            
-            var success = true
-            for photo in self.photos {
-                if photo.save(to: file, withOwner: self.id) == nil {
-                    success = false
+    func save(to file: DatabaseFile, completionHandler: @escaping (Int64?, Error?) -> Void) {
+        fileQueue.async {
+            do {
+                try file.db?.run(TABLE_LOCATIONS.create(ifNotExists: true) { t in
+                    t.column(COLUMN_LOCATION_ID, primaryKey: true)
+                    t.column(COLUMN_LOCATION_NAME, unique: true)
+                    t.column(COLUMN_LOCATION_DESC)
+                    t.column(COLUMN_LOCATION_BARCODE)
+                })
+                
+                let insert = TABLE_LOCATIONS.insert(COLUMN_LOCATION_ID <- self.id.uuidString, COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode)
+                let rowid = try file.db?.run(insert)
+                
+                var success = true
+                for photo in self.photos {
+                    if photo.save(to: file, withOwner: self.id) == nil {
+                        success = false
+                    }
+                }
+                
+                if success {
+                    DispatchQueue.main.async {
+                        completionHandler(rowid, nil)
+                    }
+                }
+            } catch {
+                print("Unexpected error: \(error).")
+                DispatchQueue.main.async {
+                    completionHandler(nil, error)
                 }
             }
-            
-            if success {
-                return rowid
-            }
-            return nil
-        } catch {
-            debugPrint("Error saving location!")
-            return nil
         }
     }
     
