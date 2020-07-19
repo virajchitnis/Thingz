@@ -9,6 +9,8 @@
 import Foundation
 import SQLite
 
+let fileQueue = DispatchQueue(label: "file queue")
+
 class DatabaseFile {
     var path: URL
     var db: Connection?

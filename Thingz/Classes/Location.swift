@@ -62,21 +62,25 @@ class Location: ObservableObject {
         }
     }
     
-    class func read(from file: DatabaseFile, completionHandler: ([Location]) -> Void) {
-        var loadedLocations: [Location] = []
-        if let db = file.db {
-            do {
-                for location in try db.prepare(TABLE_LOCATIONS) {
-                    if let loadedId = UUID(uuidString: location[COLUMN_LOCATION_ID]) {
-                        let loadedLocation = Location(id: loadedId, name: location[COLUMN_LOCATION_NAME], description: location[COLUMN_LOCATION_DESC], barcode: location[COLUMN_LOCATION_BARCODE])
-                        loadedLocation.loadAllThings(from: file)
-                        loadedLocation.photos = UIImage.loadAllPhotos(for: loadedLocation.id, from: file)
-                        loadedLocations.append(loadedLocation)
+    class func read(from file: DatabaseFile, completionHandler: @escaping ([Location]) -> Void) {
+        fileQueue.async {
+            var loadedLocations: [Location] = []
+            if let db = file.db {
+                do {
+                    for location in try db.prepare(TABLE_LOCATIONS) {
+                        if let loadedId = UUID(uuidString: location[COLUMN_LOCATION_ID]) {
+                            let loadedLocation = Location(id: loadedId, name: location[COLUMN_LOCATION_NAME], description: location[COLUMN_LOCATION_DESC], barcode: location[COLUMN_LOCATION_BARCODE])
+                            loadedLocation.loadAllThings(from: file)
+                            loadedLocation.photos = UIImage.loadAllPhotos(for: loadedLocation.id, from: file)
+                            loadedLocations.append(loadedLocation)
+                        }
                     }
+                    DispatchQueue.main.async {
+                        completionHandler(loadedLocations)
+                    }
+                } catch {
+                    print("Unexpected error: \(error).")
                 }
-                completionHandler(loadedLocations)
-            } catch {
-                print("Unexpected error: \(error).")
             }
         }
     }

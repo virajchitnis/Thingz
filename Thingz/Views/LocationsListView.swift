@@ -12,11 +12,15 @@ struct LocationsListView: View {
     var fileURL: URL
     var dismiss: () -> Void
     @State private var locations: [Location] = []
+    @State private var loadingMessage: String = ""
     @State private var showAddLocationPopover: Bool = false
     @State private var showEditLocationPopover: Bool = false
     
     var body: some View {
         NavigationView {
+            if self.locations.count == 0 {
+                Text("\(self.loadingMessage)")
+            }
             List(locations, id: \.id) { location in
                 NavigationLink(destination: ThingsListView(fileURL: self.fileURL, location: location)) {
                     LocationRowView(location: location)
@@ -42,9 +46,6 @@ struct LocationsListView: View {
                     }
                 }
             }
-            .onAppear {
-                self.loadLocationsFromFile()
-            }
             .navigationBarTitle("Locations")
             .navigationBarItems(leading: Button(action: dismiss) {
                 Image(systemName: "xmark")
@@ -60,12 +61,17 @@ struct LocationsListView: View {
             }
             .font(.title))
         }
+        .onAppear {
+            self.loadLocationsFromFile()
+        }
     }
     
     func loadLocationsFromFile() {
+        self.loadingMessage = "Reading file..."
         if let dbFile = DatabaseFile(path: self.fileURL) {
             Location.read(from: dbFile, completionHandler: { locations in
                 self.locations = locations
+                self.loadingMessage = ""
             })
         }
     }
