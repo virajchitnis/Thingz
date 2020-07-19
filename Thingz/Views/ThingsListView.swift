@@ -37,6 +37,7 @@ struct ThingsListView: View {
         }
         .popover(isPresented: $showAddThingPopover) {
             AddThingView(location: self.location, callback: self.save)
+                .frame(minWidth: 300)
         }
         .font(.title))
     }

@@ -47,6 +47,7 @@ struct LocationsListView: View {
             }
             .popover(isPresented: $showAddLocationPopover) {
                 AddLocationView(callback: self.save)
+                    .frame(minWidth: 300)
             }
             .font(.title))
         }
