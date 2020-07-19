@@ -16,25 +16,27 @@ struct ThingsListView: View {
     
     var body: some View {
         List(location.things, id: \.id) { thing in
-            ThingRowView(thing: thing)
-            .contextMenu {
-                Button(action: {
-                    self.showEditThingPopover = true
-                }) {
-                    Text("Edit")
-                    Image(systemName: "pencil")
-                }
-                .popover(isPresented: self.$showEditThingPopover) {
-                    AddThingView(thing: thing, location: self.location, callback: self.edit)
-                        .frame(minWidth: 300)
-                }
-                Button(action: {
-                    if self.delete(thing: thing) {
-                        self.location.things.removeAll(where: { $0.id == thing.id })
+            NavigationLink(destination: ThingRowView(thing: thing)) {
+                ThingRowView(thing: thing)
+                .contextMenu {
+                    Button(action: {
+                        self.showEditThingPopover = true
+                    }) {
+                        Text("Edit")
+                        Image(systemName: "pencil")
                     }
-                }) {
-                    Text("Delete")
-                    Image(systemName: "trash")
+                    .popover(isPresented: self.$showEditThingPopover) {
+                        AddThingView(thing: thing, location: self.location, callback: self.edit)
+                            .frame(minWidth: 300)
+                    }
+                    Button(action: {
+                        if self.delete(thing: thing) {
+                            self.location.things.removeAll(where: { $0.id == thing.id })
+                        }
+                    }) {
+                        Text("Delete")
+                        Image(systemName: "trash")
+                    }
                 }
             }
         }
