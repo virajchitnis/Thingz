@@ -103,6 +103,20 @@ class Location: ObservableObject {
         let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == self.id.uuidString)
         do {
             try file.db?.run(thisLocation.update(COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode))
+            
+            var success = true
+            if !UIImage.delete(for: self.id, from: file) {
+                success = false
+            }
+            for photo in self.photos {
+                if photo.save(to: file, withOwner: self.id) == nil {
+                    success = false
+                }
+            }
+            
+            if !success {
+                return false
+            }
             return true
         } catch {
             debugPrint("Error updating location!")

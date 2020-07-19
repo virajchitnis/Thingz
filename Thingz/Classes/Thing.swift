@@ -72,6 +72,20 @@ class Thing {
         let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == self.id.uuidString)
         do {
             try file.db?.run(thisThing.update(COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode))
+            
+            var success = true
+            if !UIImage.delete(for: self.id, from: file) {
+                success = false
+            }
+            for photo in self.photos {
+                if photo.save(to: file, withOwner: self.id) == nil {
+                    success = false
+                }
+            }
+            
+            if !success {
+                return false
+            }
             return true
         } catch {
             debugPrint("Error updating thing!")
