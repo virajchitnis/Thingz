@@ -86,6 +86,17 @@ class Location: ObservableObject {
         self.things = loadedThings
     }
     
+    func update(in file: DatabaseFile) -> Bool {
+        let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == self.id.uuidString)
+        do {
+            try file.db?.run(thisLocation.update(COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode))
+            return true
+        } catch {
+            debugPrint("Error updating location!")
+            return false
+        }
+    }
+    
     class func delete(location: Location, from file: DatabaseFile) -> Bool {
         let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == location.id.uuidString)
         

@@ -13,6 +13,7 @@ struct LocationsListView: View {
     var dismiss: () -> Void
     @State private var locations: [Location] = []
     @State private var showAddLocationPopover: Bool = false
+    @State private var showEditLocationPopover: Bool = false
     
     var body: some View {
         NavigationView {
@@ -21,14 +22,22 @@ struct LocationsListView: View {
                     LocationRowView(location: location)
                     .contextMenu {
                         Button(action: {
+                            self.showEditLocationPopover = true
+                        }) {
+                            Text("Edit")
+                            Image(systemName: "pencil")
+                        }
+                        .popover(isPresented: self.$showEditLocationPopover) {
+                            AddLocationView(location: location, callback: self.edit)
+                                .frame(minWidth: 300)
+                        }
+                        Button(action: {
                             if self.delete(location: location) {
                                 self.locations.removeAll(where: { $0.id == location.id })
                             }
                         }) {
-                            HStack {
-                                Image(systemName: "trash")
-                                Text("Delete")
-                            }
+                            Image(systemName: "trash")
+                            Text("Delete")
                         }
                     }
                 }
@@ -63,6 +72,16 @@ struct LocationsListView: View {
         if let dbFile = DatabaseFile(path: self.fileURL) {
             if newLocation.save(file: dbFile) != nil {
                 self.locations.append(newLocation)
+                return true
+            }
+        }
+        return false
+    }
+    
+    func edit(location: Location) -> Bool {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            if location.update(in: dbFile) {
+                loadLocationsFromFile()
                 return true
             }
         }

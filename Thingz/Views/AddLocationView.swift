@@ -9,8 +9,10 @@
 import SwiftUI
 
 struct AddLocationView: View {
+    var location: Location?
     var callback: (Location) -> Bool
     @Environment(\.presentationMode) var presentation
+    @State private var title: String = "New Location"
     @State private var showBarcodeScanner: Bool = false
     @State private var locationName: String = ""
     @State private var locationDesc: String = ""
@@ -29,7 +31,7 @@ struct AddLocationView: View {
             }
             HStack {
                 Spacer()
-                Text("New Location")
+                Text("\(self.title)")
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .padding(.top)
@@ -52,11 +54,31 @@ struct AddLocationView: View {
                 })
             }.padding(.top)
             Spacer()
-        }.padding()
+        }
+            .padding()
+            .onAppear {
+                self.displayExistingLocation()
+            }
+    }
+    
+    func displayExistingLocation() {
+        if let location = self.location {
+            self.title = "Edit \(location.name)"
+            self.locationName = location.name
+            self.locationDesc = location.description
+            self.locationBarcode = location.barcode
+        }
     }
     
     func saveLocation() {
-        if !self.locationName.isEmpty {
+        if let location = self.location, !self.locationName.isEmpty {
+            location.name = self.locationName
+            location.description = self.locationDesc
+            location.barcode = self.locationBarcode
+            if callback(location) {
+                self.dismissView()
+            }
+        } else if !self.locationName.isEmpty {
             let newLocation = Location(name: self.locationName, description: self.locationDesc, barcode: self.locationBarcode)
             if callback(newLocation) {
                 self.dismissView()
