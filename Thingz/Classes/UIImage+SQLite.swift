@@ -51,4 +51,18 @@ extension UIImage {
         }
         return loadedPhotos
     }
+    
+    class func delete(for owner: UUID, from file: DatabaseFile) -> Bool {
+        let dbPhotos = TABLE_PHOTOS.filter(COLUMN_PHOTOS_OWNERID == owner.uuidString)
+        if let db = file.db {
+            do {
+                try db.run(dbPhotos.delete())
+                return true
+            } catch {
+                debugPrint("Error deleting photos!")
+                return false
+            }
+        }
+        return false
+    }
 }

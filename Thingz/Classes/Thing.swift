@@ -83,6 +83,15 @@ class Thing {
         let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
         do {
             try file.db?.run(thisThing.delete())
+            
+            var success = true
+            if !UIImage.delete(for: thing.id, from: file) {
+                success = false
+            }
+            
+            if !success {
+                return false
+            }
             return true
         } catch {
             debugPrint("Error deleting thing!")

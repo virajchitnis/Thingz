@@ -120,6 +120,10 @@ class Location: ObservableObject {
             }
         }
         
+        if !UIImage.delete(for: location.id, from: file) {
+            success = false
+        }
+        
         if success {
             do {
                 try file.db?.run(thisLocation.delete())
