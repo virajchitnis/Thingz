@@ -37,34 +37,39 @@ class Thing {
         self.photos = photos
     }
     
-    func save(file: DatabaseFile) -> Int64? {
-        do {
-            try file.db?.run(TABLE_THINGS.create(ifNotExists: true) { t in
-                t.column(COLUMN_THING_ID, primaryKey: true)
-                t.column(COLUMN_THING_NAME)
-                t.column(COLUMN_THING_DESC)
-                t.column(COLUMN_THING_QUANT)
-                t.column(COLUMN_THING_BARCODE)
-                t.column(COLUMN_THING_LOCID)
-            })
-            
-            let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
-            let rowid = try file.db?.run(insert)
-            
-            var success = true
-            for photo in self.photos {
-                if photo.save(to: file, withOwner: self.id) == nil {
-                    success = false
+    func save(to file: DatabaseFile, completionHandler: @escaping (Int64?, Error?) -> Void) {
+        fileQueue.async {
+            do {
+                try file.db?.run(TABLE_THINGS.create(ifNotExists: true) { t in
+                    t.column(COLUMN_THING_ID, primaryKey: true)
+                    t.column(COLUMN_THING_NAME)
+                    t.column(COLUMN_THING_DESC)
+                    t.column(COLUMN_THING_QUANT)
+                    t.column(COLUMN_THING_BARCODE)
+                    t.column(COLUMN_THING_LOCID)
+                })
+                
+                let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
+                let rowid = try file.db?.run(insert)
+                
+                var success = true
+                for photo in self.photos {
+                    if photo.save(to: file, withOwner: self.id) == nil {
+                        success = false
+                    }
+                }
+                
+                if success {
+                    DispatchQueue.main.async {
+                        completionHandler(rowid, nil)
+                    }
+                }
+            } catch {
+                print("Unexpected error: \(error).")
+                DispatchQueue.main.async {
+                    completionHandler(nil, error)
                 }
             }
-            
-            if success {
-                return rowid
-            }
-            return nil
-        } catch {
-            debugPrint("Error saving location!")
-            return nil
         }
     }
     

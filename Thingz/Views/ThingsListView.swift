@@ -55,9 +55,11 @@ struct ThingsListView: View {
     
     func save(newThing: Thing) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            if newThing.save(file: dbFile) != nil {
-                self.location.things.append(newThing)
-            }
+            newThing.save(to: dbFile, completionHandler: { (rowid, error) in
+                if error == nil {
+                    self.location.things.append(newThing)
+                }
+            })
         }
     }
     
