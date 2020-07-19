@@ -62,7 +62,7 @@ class Location: ObservableObject {
         }
     }
     
-    class func read(from file: DatabaseFile, completionHandler: @escaping ([Location]) -> Void) {
+    class func read(from file: DatabaseFile, completionHandler: @escaping ([Location], Error?) -> Void) {
         fileQueue.async {
             var loadedLocations: [Location] = []
             if let db = file.db {
@@ -76,10 +76,17 @@ class Location: ObservableObject {
                         }
                     }
                     DispatchQueue.main.async {
-                        completionHandler(loadedLocations)
+                        completionHandler(loadedLocations, nil)
+                    }
+                } catch let Result.error(_, code, _) where code == 1 {
+                    DispatchQueue.main.async {
+                        completionHandler(loadedLocations, nil)
                     }
                 } catch {
                     print("Unexpected error: \(error).")
+                    DispatchQueue.main.async {
+                        completionHandler(loadedLocations, error)
+                    }
                 }
             }
         }

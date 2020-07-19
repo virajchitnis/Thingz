@@ -12,54 +12,56 @@ struct LocationsListView: View {
     var fileURL: URL
     var dismiss: () -> Void
     @State private var locations: [Location] = []
+    @State private var loading: Bool = false
     @State private var loadingMessage: String = ""
     @State private var showAddLocationPopover: Bool = false
     @State private var showEditLocationPopover: Bool = false
     
     var body: some View {
         NavigationView {
-            if self.locations.count == 0 {
+            if self.loading {
                 Text("\(self.loadingMessage)")
-            }
-            List(locations, id: \.id) { location in
-                NavigationLink(destination: ThingsListView(fileURL: self.fileURL, location: location)) {
-                    LocationRowView(location: location)
-                    .contextMenu {
-                        Button(action: {
-                            self.showEditLocationPopover = true
-                        }) {
-                            Text("Edit")
-                            Image(systemName: "pencil")
-                        }
-                        .popover(isPresented: self.$showEditLocationPopover) {
-                            AddLocationView(location: location, callback: self.edit)
-                                .frame(minWidth: 300)
-                        }
-                        Button(action: {
-                            if self.delete(location: location) {
-                                self.locations.removeAll(where: { $0.id == location.id })
+            } else {
+                List(locations, id: \.id) { location in
+                    NavigationLink(destination: ThingsListView(fileURL: self.fileURL, location: location)) {
+                        LocationRowView(location: location)
+                        .contextMenu {
+                            Button(action: {
+                                self.showEditLocationPopover = true
+                            }) {
+                                Text("Edit")
+                                Image(systemName: "pencil")
                             }
-                        }) {
-                            Image(systemName: "trash")
-                            Text("Delete")
+                            .popover(isPresented: self.$showEditLocationPopover) {
+                                AddLocationView(location: location, callback: self.edit)
+                                    .frame(minWidth: 300)
+                            }
+                            Button(action: {
+                                if self.delete(location: location) {
+                                    self.locations.removeAll(where: { $0.id == location.id })
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                Text("Delete")
+                            }
                         }
                     }
                 }
+                .navigationBarTitle("Locations")
+                .navigationBarItems(leading: Button(action: dismiss) {
+                    Image(systemName: "xmark")
+                }
+                .font(.title), trailing: Button(action: {
+                    self.showAddLocationPopover = true
+                }) {
+                    Image(systemName: "plus")
+                }
+                .popover(isPresented: $showAddLocationPopover) {
+                    AddLocationView(callback: self.save)
+                        .frame(minWidth: 300)
+                }
+                .font(.title))
             }
-            .navigationBarTitle("Locations")
-            .navigationBarItems(leading: Button(action: dismiss) {
-                Image(systemName: "xmark")
-            }
-            .font(.title), trailing: Button(action: {
-                self.showAddLocationPopover = true
-            }) {
-                Image(systemName: "plus")
-            }
-            .popover(isPresented: $showAddLocationPopover) {
-                AddLocationView(callback: self.save)
-                    .frame(minWidth: 300)
-            }
-            .font(.title))
         }
         .onAppear {
             self.loadLocationsFromFile()
@@ -67,11 +69,18 @@ struct LocationsListView: View {
     }
     
     func loadLocationsFromFile() {
+        self.loading = true
         self.loadingMessage = "Reading file..."
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            Location.read(from: dbFile, completionHandler: { locations in
-                self.locations = locations
-                self.loadingMessage = ""
+            Location.read(from: dbFile, completionHandler: { (locations, error) in
+                if error == nil {
+                    self.locations = locations
+                    self.loading = false
+                    self.loadingMessage = ""
+                } else {
+                    self.loading = true
+                    self.loadingMessage = "Unable to read file"
+                }
             })
         }
     }
