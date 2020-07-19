@@ -11,8 +11,10 @@ import SwiftUI
 struct AddLocationView: View {
     var callback: (Location) -> Bool
     @Environment(\.presentationMode) var presentation
+    @State private var showBarcodeScanner: Bool = false
     @State private var locationName: String = ""
     @State private var locationDesc: String = ""
+    @State private var locationBarcode: String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -38,17 +40,32 @@ struct AddLocationView: View {
                 .padding(.top)
             TextField("Description", text: $locationDesc)
                 .padding(.top)
+            HStack {
+                TextField("Barcode", text: $locationBarcode)
+                    .disabled(true)
+                Button(action: {
+                    self.showBarcodeScanner = true
+                }) {
+                    Text("Scan Barcode")
+                }.sheet(isPresented: $showBarcodeScanner, content: {
+                    BarcodeScannerView(callback: self.barcodeScanned)
+                })
+            }.padding(.top)
             Spacer()
         }.padding()
     }
     
     func saveLocation() {
         if !self.locationName.isEmpty {
-            let newLocation = Location(name: self.locationName, description: self.locationDesc)
+            let newLocation = Location(name: self.locationName, description: self.locationDesc, barcode: self.locationBarcode)
             if callback(newLocation) {
                 self.dismissView()
             }
         }
+    }
+    
+    func barcodeScanned(barcode: String) {
+        self.locationBarcode = barcode
     }
     
     func dismissView() {

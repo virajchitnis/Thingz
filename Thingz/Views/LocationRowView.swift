@@ -16,6 +16,9 @@ struct LocationRowView: View {
             VStack(alignment: .leading) {
                 Text("\(self.location.name)")
                     .font(.headline)
+                Text("\(self.location.barcode)")
+                    .font(.caption)
+                    .foregroundColor(Color.gray)
                 Text("\(self.location.description)")
                     .font(.subheadline)
                     .foregroundColor(Color.gray)

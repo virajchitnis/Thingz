@@ -14,18 +14,21 @@ let TABLE_LOCATIONS = Table("Locations")
 let COLUMN_LOCATION_ID = Expression<String>("id")
 let COLUMN_LOCATION_NAME = Expression<String>("name")
 let COLUMN_LOCATION_DESC = Expression<String>("description")
+let COLUMN_LOCATION_BARCODE = Expression<String>("barcode")
 
 class Location: ObservableObject {
     var id: UUID
     var name: String
     var description: String
+    var barcode: String
     @Published var things: [Thing]
     var photos: [UIImage]
     
-    init(id: UUID = UUID(), name: String, description: String = "", things: [Thing] = [], photos: [UIImage] = []) {
+    init(id: UUID = UUID(), name: String, description: String = "", barcode: String = "", things: [Thing] = [], photos: [UIImage] = []) {
         self.id = id
         self.name = name
         self.description = description
+        self.barcode = barcode
         self.things = things
         self.photos = photos
     }
@@ -36,9 +39,10 @@ class Location: ObservableObject {
                 t.column(COLUMN_LOCATION_ID, primaryKey: true)
                 t.column(COLUMN_LOCATION_NAME, unique: true)
                 t.column(COLUMN_LOCATION_DESC)
+                t.column(COLUMN_LOCATION_BARCODE)
             })
             
-            let insert = TABLE_LOCATIONS.insert(COLUMN_LOCATION_ID <- self.id.uuidString, COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description)
+            let insert = TABLE_LOCATIONS.insert(COLUMN_LOCATION_ID <- self.id.uuidString, COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode)
             let rowid = try file.db?.run(insert)
             return rowid
         } catch {
@@ -53,7 +57,7 @@ class Location: ObservableObject {
             do {
                 for location in try db.prepare(TABLE_LOCATIONS) {
                     if let loadedId = UUID(uuidString: location[COLUMN_LOCATION_ID]) {
-                        let loadedLocation = Location(id: loadedId, name: location[COLUMN_LOCATION_NAME], description: location[COLUMN_LOCATION_DESC])
+                        let loadedLocation = Location(id: loadedId, name: location[COLUMN_LOCATION_NAME], description: location[COLUMN_LOCATION_DESC], barcode: location[COLUMN_LOCATION_BARCODE])
                         loadedLocation.loadAllThings(from: file)
                         loadedLocations.append(loadedLocation)
                     }
