@@ -12,20 +12,29 @@ struct ThingsListView: View {
     var fileURL: URL
     @ObservedObject var location: Location
     @State private var showAddThingPopover: Bool = false
+    @State private var showEditThingPopover: Bool = false
     
     var body: some View {
         List(location.things, id: \.id) { thing in
             ThingRowView(thing: thing)
             .contextMenu {
                 Button(action: {
+                    self.showEditThingPopover = true
+                }) {
+                    Text("Edit")
+                    Image(systemName: "pencil")
+                }
+                .popover(isPresented: self.$showEditThingPopover) {
+                    AddThingView(thing: thing, location: self.location, callback: self.edit)
+                        .frame(minWidth: 300)
+                }
+                Button(action: {
                     if self.delete(thing: thing) {
                         self.location.things.removeAll(where: { $0.id == thing.id })
                     }
                 }) {
-                    HStack {
-                        Image(systemName: "trash")
-                        Text("Delete")
-                    }
+                    Text("Delete")
+                    Image(systemName: "trash")
                 }
             }
         }
@@ -47,6 +56,18 @@ struct ThingsListView: View {
             if newThing.save(file: dbFile) != nil {
                 self.location.things.append(newThing)
                 return true
+            }
+        }
+        return false
+    }
+    
+    func edit(thing: Thing) -> Bool {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            if thing.update(in: dbFile) {
+                if let thingIndex = self.location.things.firstIndex(where: { $0.id == thing.id }) {
+                    self.location.things[thingIndex] = thing
+                    return true
+                }
             }
         }
         return false

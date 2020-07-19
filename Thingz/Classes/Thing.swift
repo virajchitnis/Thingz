@@ -57,6 +57,17 @@ class Thing {
         }
     }
     
+    func update(in file: DatabaseFile) -> Bool {
+        let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == self.id.uuidString)
+        do {
+            try file.db?.run(thisThing.update(COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode))
+            return true
+        } catch {
+            debugPrint("Error updating thing!")
+            return false
+        }
+    }
+    
     class func delete(thing: Thing, from file: DatabaseFile) -> Bool {
         let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
         do {

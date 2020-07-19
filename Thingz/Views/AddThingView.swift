@@ -9,9 +9,11 @@
 import SwiftUI
 
 struct AddThingView: View {
+    var thing: Thing?
     var location: Location
     var callback: (Thing) -> Bool
     @Environment(\.presentationMode) var presentation
+    @State private var title: String = "New Thing"
     @State private var showBarcodeScanner: Bool = false
     @State private var thingName: String = ""
     @State private var thingDesc: String = ""
@@ -31,7 +33,7 @@ struct AddThingView: View {
             }
             HStack {
                 Spacer()
-                Text("New Thing")
+                Text("\(self.title)")
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .padding(.top)
@@ -57,11 +59,30 @@ struct AddThingView: View {
                 })
             }.padding(.top)
             Spacer()
-        }.padding()
+        }
+            .padding()
+            .onAppear {
+                self.displayExistingThing()
+            }
+    }
+    
+    func displayExistingThing() {
+        if let thing = self.thing {
+            self.title = "Edit \(thing.name)"
+            self.thingName = thing.name
+            self.thingDesc = thing.description
+            self.thingQuantity = thing.quantity
+            self.thingBarcode = thing.barcode
+        }
     }
     
     func saveThing() {
-        if !self.thingName.isEmpty {
+        if let thing = self.thing, !self.thingName.isEmpty {
+            let updatedThing = Thing(id: thing.id, name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: thing.locationId)
+            if callback(updatedThing) {
+                self.dismissView()
+            }
+        } else if !self.thingName.isEmpty {
             let newThing = Thing(name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: self.location.id)
             if callback(newThing) {
                 self.dismissView()
