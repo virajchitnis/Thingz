@@ -12,21 +12,37 @@ struct ThingRowView: View {
     var thing: Thing
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("\(self.thing.name)")
-                    .font(.headline)
-                Spacer()
-                Text("\(self.thing.barcode)")
-                    .font(.caption)
-                    .foregroundColor(Color.gray)
+        VStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("\(self.thing.name)")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(self.thing.barcode)")
+                        .font(.caption)
+                        .foregroundColor(Color.gray)
+                }
+                HStack {
+                    Text("\(self.thing.description)")
+                        .font(.subheadline)
+                        .foregroundColor(Color.gray)
+                    Spacer()
+                    Text("\(self.thing.quantity)")
+                }
             }
-            HStack {
-                Text("\(self.thing.description)")
-                    .font(.subheadline)
-                    .foregroundColor(Color.gray)
-                Spacer()
-                Text("\(self.thing.quantity)")
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(self.thing.photos, id: \.self) { image in
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color.gray, lineWidth: 2)
+                            )
+                    }
+                }.padding()
             }
         }
     }
