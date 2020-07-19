@@ -44,7 +44,18 @@ class Location: ObservableObject {
             
             let insert = TABLE_LOCATIONS.insert(COLUMN_LOCATION_ID <- self.id.uuidString, COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode)
             let rowid = try file.db?.run(insert)
-            return rowid
+            
+            var success = true
+            for photo in self.photos {
+                if photo.save(to: file, withOwner: self.id) == nil {
+                    success = false
+                }
+            }
+            
+            if success {
+                return rowid
+            }
+            return nil
         } catch {
             debugPrint("Error saving location!")
             return nil
@@ -59,6 +70,7 @@ class Location: ObservableObject {
                     if let loadedId = UUID(uuidString: location[COLUMN_LOCATION_ID]) {
                         let loadedLocation = Location(id: loadedId, name: location[COLUMN_LOCATION_NAME], description: location[COLUMN_LOCATION_DESC], barcode: location[COLUMN_LOCATION_BARCODE])
                         loadedLocation.loadAllThings(from: file)
+                        loadedLocation.photos = UIImage.loadAllPhotos(for: loadedLocation.id, from: file)
                         loadedLocations.append(loadedLocation)
                     }
                 }
