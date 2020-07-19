@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AddLocationView: View {
     var location: Location?
-    var callback: (Location) -> Bool
+    var callback: (Location) -> Void
     @Environment(\.presentationMode) var presentation
     @State private var title: String = "New Location"
     @State private var showBarcodeScanner: Bool = false
@@ -111,14 +111,12 @@ struct AddLocationView: View {
     func saveLocation() {
         if let location = self.location, !self.locationName.isEmpty {
             let updatedLocation = Location(id: location.id, name: self.locationName, description: self.locationDesc, barcode: self.locationBarcode, things: location.things, photos: self.images)
-            if callback(updatedLocation) {
-                self.dismissView()
-            }
+            self.dismissView()
+            callback(updatedLocation)
         } else if !self.locationName.isEmpty {
             let newLocation = Location(name: self.locationName, description: self.locationDesc, barcode: self.locationBarcode, photos: self.images)
-            if callback(newLocation) {
-                self.dismissView()
-            }
+            self.dismissView()
+            callback(newLocation)
         }
     }
     
@@ -138,7 +136,6 @@ struct AddLocationView: View {
 struct AddLocationView_Previews: PreviewProvider {
     static var previews: some View {
         AddLocationView(callback: { location in
-            return true
         })
     }
 }

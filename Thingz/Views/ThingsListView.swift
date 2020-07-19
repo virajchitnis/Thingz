@@ -53,26 +53,22 @@ struct ThingsListView: View {
         .font(.title))
     }
     
-    func save(newThing: Thing) -> Bool {
+    func save(newThing: Thing) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
             if newThing.save(file: dbFile) != nil {
                 self.location.things.append(newThing)
-                return true
             }
         }
-        return false
     }
     
-    func edit(thing: Thing) -> Bool {
+    func edit(thing: Thing) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
             if thing.update(in: dbFile) {
                 if let thingIndex = self.location.things.firstIndex(where: { $0.id == thing.id }) {
                     self.location.things[thingIndex] = thing
-                    return true
                 }
             }
         }
-        return false
     }
     
     func delete(thing: Thing) -> Bool {

@@ -11,7 +11,7 @@ import SwiftUI
 struct AddThingView: View {
     var thing: Thing?
     var location: Location
-    var callback: (Thing) -> Bool
+    var callback: (Thing) -> Void
     @Environment(\.presentationMode) var presentation
     @State private var title: String = "New Thing"
     @State private var showBarcodeScanner: Bool = false
@@ -117,14 +117,12 @@ struct AddThingView: View {
     func saveThing() {
         if let thing = self.thing, !self.thingName.isEmpty {
             let updatedThing = Thing(id: thing.id, name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: thing.locationId, photos: self.images)
-            if callback(updatedThing) {
-                self.dismissView()
-            }
+            self.dismissView()
+            callback(updatedThing)
         } else if !self.thingName.isEmpty {
             let newThing = Thing(name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: self.location.id, photos: self.images)
-            if callback(newThing) {
-                self.dismissView()
-            }
+            self.dismissView()
+            callback(newThing)
         }
     }
     
@@ -144,7 +142,6 @@ struct AddThingView: View {
 struct AddThingView_Previews: PreviewProvider {
     static var previews: some View {
         AddThingView(location: Location(name: "Blah"), callback: { thing in
-            return true
         })
     }
 }

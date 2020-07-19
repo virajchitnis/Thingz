@@ -70,26 +70,22 @@ struct LocationsListView: View {
         }
     }
     
-    func save(newLocation: Location) -> Bool {
+    func save(newLocation: Location) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
             if newLocation.save(file: dbFile) != nil {
                 self.locations.append(newLocation)
-                return true
             }
         }
-        return false
     }
     
-    func edit(location: Location) -> Bool {
+    func edit(location: Location) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
             if location.update(in: dbFile) {
                 if let locationIndex = self.locations.firstIndex(where: { $0.id == location.id }) {
                     self.locations[locationIndex] = location
-                    return true
                 }
             }
         }
-        return false
     }
     
     func delete(location: Location) -> Bool {
