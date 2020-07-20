@@ -10,15 +10,23 @@ import SwiftUI
 
 struct SearchView: View {
     @Environment(\.presentationMode) var presentation
-    @State private var searchText: String = ""
+    var fileURL: URL
     @State private var filteredThings: [Thing] = []
+    @State private var searchText: String = ""
     
     var body: some View {
-        VStack {
+        let binding = Binding<String>(get: {
+            self.searchText
+        }, set: {
+            self.searchText = $0
+            self.executeSearch(withKey: $0)
+        })
+        
+        return VStack {
             HStack {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                    TextField("Search", text: $searchText)
+                    TextField("Search", text: binding)
                         .keyboardType(.webSearch)
                 }
                     .padding(.leading, 10)
@@ -36,10 +44,20 @@ struct SearchView: View {
             }
         }
     }
+    
+    func executeSearch(withKey key: String) {
+        if let dbFile = DatabaseFile(path: self.fileURL) {
+            Thing.search(withKey: key, in: dbFile, completionHandler: { (matchingThings, error) in
+                if error == nil {
+                    self.filteredThings = matchingThings
+                }
+            })
+        }
+    }
 }
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView()
+        SearchView(fileURL: URL(fileURLWithPath: "blah"))
     }
 }

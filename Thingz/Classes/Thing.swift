@@ -37,6 +37,31 @@ class Thing {
         self.photos = photos
     }
     
+    class func search(withKey key: String, in file: DatabaseFile, completionHandler: @escaping ([Thing], Error?) -> Void) {
+        fileQueue.async {
+            if let db = file.db {
+                do {
+                    var matchingThings: [Thing] = []
+                    for thingRow in try db.prepare(TABLE_THINGS.filter(COLUMN_THING_NAME.like("%\(key)%") || COLUMN_THING_BARCODE.like("%\(key)%") || COLUMN_THING_DESC.like("%\(key)%"))) {
+                        if let loadedId = UUID(uuidString: thingRow[COLUMN_THING_ID]), let loadedLocId = UUID(uuidString: thingRow[COLUMN_THING_LOCID]) {
+                            let loadedThing = Thing(id: loadedId, name: thingRow[COLUMN_THING_NAME], description: thingRow[COLUMN_THING_DESC], quantity: Int(thingRow[COLUMN_THING_QUANT]), barcode: thingRow[COLUMN_THING_BARCODE], locationId: loadedLocId)
+                            matchingThings.append(loadedThing)
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        completionHandler(matchingThings, nil)
+                    }
+                } catch {
+                    print("Unexpected error: \(error).")
+                    DispatchQueue.main.async {
+                        completionHandler([], error)
+                    }
+                }
+            }
+        }
+    }
+    
     func save(to file: DatabaseFile, completionHandler: @escaping (Int64?, Error?) -> Void) {
         fileQueue.async {
             UIImage.save(photos: self.photos, withOwner: self.id, to: file, completionHandler: { error in

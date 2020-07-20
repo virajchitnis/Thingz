@@ -64,7 +64,7 @@ struct LocationsListView: View {
                     .font(.title)
                     .padding(.trailing)
                     .sheet(isPresented: $showSearchPane, content: {
-                        SearchView()
+                        SearchView(fileURL: self.fileURL)
                     })
                     Button(action: {
                         self.showAddLocationPopover = true
