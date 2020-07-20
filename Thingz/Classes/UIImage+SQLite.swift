@@ -15,23 +15,41 @@ let COLUMN_PHOTOS_DATA = Expression<String>("data")
 let COLUMN_PHOTOS_OWNERID = Expression<String>("owner_id")
 
 extension UIImage {
-    func save(to file: DatabaseFile, withOwner owner: UUID) -> Int64? {
+    func save(to file: DatabaseFile, withOwner owner: UUID, completionHandler: @escaping (Error?) -> Void) {
         do {
-            try file.db?.run(TABLE_PHOTOS.create(ifNotExists: true) { t in
-                t.column(COLUMN_PHOTOS_DATA)
-                t.column(COLUMN_PHOTOS_OWNERID)
-            })
-            
-            if let photoData = self.pngData() {
-                let strBase64 = photoData.base64EncodedString(options: .lineLength64Characters)
-                let insert = TABLE_PHOTOS.insert(COLUMN_PHOTOS_DATA <- strBase64, COLUMN_PHOTOS_OWNERID <- owner.uuidString)
-                let rowid = try file.db?.run(insert)
-                return rowid
+            if let db = file.db {
+                try db.run(TABLE_PHOTOS.create(ifNotExists: true) { t in
+                    t.column(COLUMN_PHOTOS_DATA)
+                    t.column(COLUMN_PHOTOS_OWNERID)
+                })
+                
+                if let photoData = self.pngData() {
+                    let strBase64 = photoData.base64EncodedString(options: .lineLength64Characters)
+                    let insert = TABLE_PHOTOS.insert(COLUMN_PHOTOS_DATA <- strBase64, COLUMN_PHOTOS_OWNERID <- owner.uuidString)
+                    try db.run(insert)
+                    completionHandler(nil)
+                }
             }
         } catch {
-            debugPrint("Error saving photos!")
+            print("Unexpected error: \(error).")
+            completionHandler(error)
         }
-        return nil
+    }
+    
+    class func save(photos: [UIImage], withOwner owner: UUID, to file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        for photo in photos {
+            var success = true
+            photo.save(to: file, withOwner: owner, completionHandler: { error in
+                if error != nil {
+                    success = false
+                    completionHandler(error)
+                }
+            })
+            if !success {
+                return
+            }
+        }
+        completionHandler(nil)
     }
     
     class func loadAllPhotos(for owner: UUID, from file: DatabaseFile) -> [UIImage] {

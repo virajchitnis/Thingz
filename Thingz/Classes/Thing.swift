@@ -39,37 +39,38 @@ class Thing {
     
     func save(to file: DatabaseFile, completionHandler: @escaping (Int64?, Error?) -> Void) {
         fileQueue.async {
-            do {
-                try file.db?.run(TABLE_THINGS.create(ifNotExists: true) { t in
-                    t.column(COLUMN_THING_ID, primaryKey: true)
-                    t.column(COLUMN_THING_NAME)
-                    t.column(COLUMN_THING_DESC)
-                    t.column(COLUMN_THING_QUANT)
-                    t.column(COLUMN_THING_BARCODE)
-                    t.column(COLUMN_THING_LOCID)
-                })
-                
-                let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
-                let rowid = try file.db?.run(insert)
-                
-                var success = true
-                for photo in self.photos {
-                    if photo.save(to: file, withOwner: self.id) == nil {
-                        success = false
+            UIImage.save(photos: self.photos, withOwner: self.id, to: file, completionHandler: { error in
+                if error == nil {
+                    do {
+                        if let db = file.db {
+                            try db.run(TABLE_THINGS.create(ifNotExists: true) { t in
+                                t.column(COLUMN_THING_ID, primaryKey: true)
+                                t.column(COLUMN_THING_NAME)
+                                t.column(COLUMN_THING_DESC)
+                                t.column(COLUMN_THING_QUANT)
+                                t.column(COLUMN_THING_BARCODE)
+                                t.column(COLUMN_THING_LOCID)
+                            })
+                            
+                            let insert = TABLE_THINGS.insert(COLUMN_THING_ID <- self.id.uuidString, COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode, COLUMN_THING_LOCID <- self.locationId.uuidString)
+                            let rowid = try db.run(insert)
+                            
+                            DispatchQueue.main.async {
+                                completionHandler(rowid, nil)
+                            }
+                        }
+                    } catch {
+                        print("Unexpected error: \(error).")
+                        DispatchQueue.main.async {
+                            completionHandler(nil, error)
+                        }
                     }
-                }
-                
-                if success {
+                } else {
                     DispatchQueue.main.async {
-                        completionHandler(rowid, nil)
+                        completionHandler(nil, error)
                     }
                 }
-            } catch {
-                print("Unexpected error: \(error).")
-                DispatchQueue.main.async {
-                    completionHandler(nil, error)
-                }
-            }
+            })
         }
     }
     
@@ -77,24 +78,28 @@ class Thing {
         fileQueue.async {
             UIImage.delete(for: self.id, from: file, completionHandler: { error in
                 if error == nil {
-                    for photo in self.photos {
-                        photo.save(to: file, withOwner: self.id)
-                    }
-                    
-                    let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == self.id.uuidString)
-                    if let db = file.db {
-                        do {
-                            try db.run(thisThing.update(COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode))
-                            DispatchQueue.main.async {
-                                completionHandler(nil)
+                    UIImage.save(photos: self.photos, withOwner: self.id, to: file, completionHandler: { error in
+                        if error == nil {
+                            let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == self.id.uuidString)
+                            if let db = file.db {
+                                do {
+                                    try db.run(thisThing.update(COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode))
+                                    DispatchQueue.main.async {
+                                        completionHandler(nil)
+                                    }
+                                } catch {
+                                    print("Unexpected error: \(error).")
+                                    DispatchQueue.main.async {
+                                        completionHandler(error)
+                                    }
+                                }
                             }
-                        } catch {
-                            print("Unexpected error: \(error).")
+                        } else {
                             DispatchQueue.main.async {
                                 completionHandler(error)
                             }
                         }
-                    }
+                    })
                 } else {
                     DispatchQueue.main.async {
                         completionHandler(error)
