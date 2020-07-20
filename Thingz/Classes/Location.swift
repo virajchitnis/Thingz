@@ -40,7 +40,7 @@ class Location: ObservableObject {
                     do {
                         try file.db?.run(TABLE_LOCATIONS.create(ifNotExists: true) { t in
                             t.column(COLUMN_LOCATION_ID, primaryKey: true)
-                            t.column(COLUMN_LOCATION_NAME, unique: true)
+                            t.column(COLUMN_LOCATION_NAME)
                             t.column(COLUMN_LOCATION_DESC)
                             t.column(COLUMN_LOCATION_BARCODE)
                         })
