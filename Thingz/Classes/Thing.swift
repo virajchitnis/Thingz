@@ -96,23 +96,45 @@ class Thing {
         }
     }
     
-    class func delete(thing: Thing, from file: DatabaseFile) -> Bool {
-        let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
-        do {
-            try file.db?.run(thisThing.delete())
-            
-            var success = true
-            if !UIImage.delete(for: thing.id, from: file) {
-                success = false
+    class func delete(thing: Thing, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        fileQueue.async {
+            let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
+            do {
+                try file.db?.run(thisThing.delete())
+                
+                UIImage.delete(for: thing.id, from: file)
+                
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            } catch {
+                print("Unexpected error: \(error).")
+                DispatchQueue.main.async {
+                    completionHandler(error)
+                }
             }
-            
-            if !success {
-                return false
+        }
+    }
+    
+    /* Delete all things belonging to a particular location.
+     * This function is not asynchronous because it will only be called when a thing is being deleted.
+     * The function for deleting a thing is already async, so this does not need to be async.
+     */
+    class func delete(things: [Thing], for location: Location, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        let dbThings = TABLE_THINGS.filter(COLUMN_THING_LOCID == location.id.uuidString)
+        if let db = file.db {
+            do {
+                try db.run(dbThings.delete())
+                
+                for thing in things {
+                    UIImage.delete(for: thing.id, from: file)
+                }
+                
+                completionHandler(nil)
+            } catch {
+                print("Unexpected error: \(error).")
+                completionHandler(error)
             }
-            return true
-        } catch {
-            debugPrint("Error deleting thing!")
-            return false
         }
     }
 }

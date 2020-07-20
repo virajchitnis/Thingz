@@ -30,9 +30,7 @@ struct ThingsListView: View {
                             .frame(minWidth: 300)
                     }
                     Button(action: {
-                        if self.delete(thing: thing) {
-                            self.location.things.removeAll(where: { $0.id == thing.id })
-                        }
+                        self.delete(thing: thing)
                     }) {
                         Text("Delete")
                         Image(systemName: "trash")
@@ -82,11 +80,14 @@ struct ThingsListView: View {
         }
     }
     
-    func delete(thing: Thing) -> Bool {
+    func delete(thing: Thing) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            return Thing.delete(thing: thing, from: dbFile)
+            Thing.delete(thing: thing, from: dbFile, completionHandler: { error in
+                if error == nil {
+                    self.location.things.removeAll(where: { $0.id == thing.id })
+                }
+            })
         }
-        return false
     }
 }
 
