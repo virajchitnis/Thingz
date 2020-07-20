@@ -31,6 +31,7 @@
 		C0BA217524C2550900648277 /* BarcodeScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0BA217424C2550900648277 /* BarcodeScanner.framework */; };
 		C0BA217624C2550900648277 /* BarcodeScanner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0BA217424C2550900648277 /* BarcodeScanner.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C0BA217824C3105300648277 /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BA217724C3105300648277 /* BarcodeScannerView.swift */; };
+		C0C6AB2624C5F51900648277 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C6AB2524C5F51900648277 /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -77,6 +78,7 @@
 		C0BA217724C3105300648277 /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
 		C0BA217924C325C300648277 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C0BA217A24C336C600648277 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		C0C6AB2524C5F51900648277 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				C0BA217224C241E800648277 /* AddThingView.swift */,
 				C0BA217724C3105300648277 /* BarcodeScannerView.swift */,
 				C058DD4724C4860000648277 /* ImagePickerView.swift */,
+				C0C6AB2524C5F51900648277 /* SearchView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				C02C36A424C0D76000648277 /* Thing.swift in Sources */,
 				C058DD4824C4860000648277 /* ImagePickerView.swift in Sources */,
 				C02C36A624C0DD7500648277 /* Location.swift in Sources */,
+				C0C6AB2624C5F51900648277 /* SearchView.swift in Sources */,
 				C0BA216924C1C75500648277 /* LocationsListView.swift in Sources */,
 				C0BA216B24C1CEC500648277 /* LocationRowView.swift in Sources */,
 				C0BA216D24C1DD9600648277 /* AddLocationView.swift in Sources */,

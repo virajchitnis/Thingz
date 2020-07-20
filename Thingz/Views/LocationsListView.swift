@@ -17,6 +17,7 @@ struct LocationsListView: View {
     @State private var loadingMessage: String = ""
     @State private var showAddLocationPopover: Bool = false
     @State private var showEditLocationPopover: Bool = false
+    @State private var showSearchPane: Bool = false
     
     var body: some View {
         NavigationView {
@@ -55,11 +56,16 @@ struct LocationsListView: View {
                     Image(systemName: "xmark")
                 }
                 .font(.title), trailing: HStack {
-                    Button(action: {}) {
+                    Button(action: {
+                        self.showSearchPane = true
+                    }) {
                         Image(systemName: "magnifyingglass")
                     }
                     .font(.title)
                     .padding(.trailing)
+                    .sheet(isPresented: $showSearchPane, content: {
+                        SearchView()
+                    })
                     Button(action: {
                         self.showAddLocationPopover = true
                     }) {
