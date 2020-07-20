@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ActivityIndicatorView
 
 struct LocationsListView: View {
     var fileURL: URL
@@ -20,7 +21,11 @@ struct LocationsListView: View {
     var body: some View {
         NavigationView {
             if self.loading {
-                Text("\(self.loadingMessage)")
+                VStack {
+                    ActivityIndicatorView(isVisible: $loading, type: .rotatingDots)
+                        .frame(width: 100, height: 100)
+                    Text("\(self.loadingMessage)")
+                }
             } else {
                 List(locations, id: \.id) { location in
                     NavigationLink(destination: ThingsListView(fileURL: self.fileURL, location: location)) {

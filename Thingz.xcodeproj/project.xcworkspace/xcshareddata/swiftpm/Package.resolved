@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "ActivityIndicatorView",
+        "repositoryURL": "git@github.com:exyte/ActivityIndicatorView.git",
+        "state": {
+          "branch": null,
+          "revision": "25bc58019d161295bf4ae0a4d764170e882ab856",
+          "version": "0.0.3"
+        }
+      },
+      {
         "package": "SQLite.swift",
         "repositoryURL": "git@github.com:stephencelis/SQLite.swift.git",
         "state": {
