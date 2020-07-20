@@ -42,9 +42,7 @@ struct LocationsListView: View {
                                     .frame(minWidth: 300)
                             }
                             Button(action: {
-                                if self.delete(location: location) {
-                                    self.locations.removeAll(where: { $0.id == location.id })
-                                }
+                                self.delete(location: location)
                             }) {
                                 Image(systemName: "trash")
                                 Text("Delete")
@@ -119,11 +117,14 @@ struct LocationsListView: View {
         }
     }
     
-    func delete(location: Location) -> Bool {
+    func delete(location: Location) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            return Location.delete(location: location, from: dbFile)
+            Location.delete(location: location, from: dbFile, completionHandler: { error in
+                if error == nil {
+                    self.locations.removeAll(where: { $0.id == location.id })
+                }
+            })
         }
-        return false
     }
 }
 

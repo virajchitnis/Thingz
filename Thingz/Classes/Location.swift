@@ -138,29 +138,27 @@ class Location: ObservableObject {
         }
     }
     
-    class func delete(location: Location, from file: DatabaseFile) -> Bool {
-        let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == location.id.uuidString)
-        
-        var success = true
-        for thing in location.things {
-            if !Thing.delete(thing: thing, from: file) {
-                success = false
+    class func delete(location: Location, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        fileQueue.async {
+            let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == location.id.uuidString)
+            
+            for thing in location.things {
+                Thing.delete(thing: thing, from: file)
             }
-        }
-        
-        if !UIImage.delete(for: location.id, from: file) {
-            success = false
-        }
-        
-        if success {
+            
+            UIImage.delete(for: location.id, from: file)
+            
             do {
                 try file.db?.run(thisLocation.delete())
-                return true
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
             } catch {
-                debugPrint("Error deleting location!")
-                return false
+                print("Unexpected error: \(error).")
+                DispatchQueue.main.async {
+                    completionHandler(error)
+                }
             }
         }
-        return false
     }
 }
