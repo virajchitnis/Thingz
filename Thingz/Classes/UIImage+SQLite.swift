@@ -15,6 +15,18 @@ let COLUMN_PHOTOS_DATA = Expression<String>("data")
 let COLUMN_PHOTOS_OWNERID = Expression<String>("owner_id")
 
 extension UIImage {
+    enum JPEGQuality: CGFloat {
+        case lowest = 0
+        case low = 0.25
+        case medium = 0.5
+        case high = 0.75
+        case highest = 1
+    }
+    
+    func jpeg(withQuality jpegQuality: JPEGQuality) -> Data? {
+        return self.jpegData(compressionQuality: jpegQuality.rawValue)
+    }
+    
     func save(to file: DatabaseFile, withOwner owner: UUID, completionHandler: @escaping (Error?) -> Void) {
         do {
             if let db = file.db {
@@ -23,7 +35,7 @@ extension UIImage {
                     t.column(COLUMN_PHOTOS_OWNERID)
                 })
                 
-                if let photoData = self.pngData() {
+                if let photoData = self.jpeg(withQuality: .lowest) {
                     let strBase64 = photoData.base64EncodedString(options: .lineLength64Characters)
                     let insert = TABLE_PHOTOS.insert(COLUMN_PHOTOS_DATA <- strBase64, COLUMN_PHOTOS_OWNERID <- owner.uuidString)
                     try db.run(insert)

@@ -111,12 +111,12 @@ struct AddLocationView: View {
     func saveLocation() {
         if let location = self.location, !self.locationName.isEmpty {
             let updatedLocation = Location(id: location.id, name: self.locationName, description: self.locationDesc, barcode: self.locationBarcode, things: location.things, photos: self.images)
-            self.dismissView()
             callback(updatedLocation)
+            self.dismissView()
         } else if !self.locationName.isEmpty {
             let newLocation = Location(name: self.locationName, description: self.locationDesc, barcode: self.locationBarcode, photos: self.images)
-            self.dismissView()
             callback(newLocation)
+            self.dismissView()
         }
     }
     

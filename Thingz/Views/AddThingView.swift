@@ -117,12 +117,12 @@ struct AddThingView: View {
     func saveThing() {
         if let thing = self.thing, !self.thingName.isEmpty {
             let updatedThing = Thing(id: thing.id, name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: thing.locationId, photos: self.images)
-            self.dismissView()
             callback(updatedThing)
+            self.dismissView()
         } else if !self.thingName.isEmpty {
             let newThing = Thing(name: self.thingName, description: self.thingDesc, quantity: self.thingQuantity, barcode: self.thingBarcode, locationId: self.location.id, photos: self.images)
-            self.dismissView()
             callback(newThing)
+            self.dismissView()
         }
     }
     
