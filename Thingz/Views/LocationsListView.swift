@@ -56,16 +56,23 @@ struct LocationsListView: View {
                 .navigationBarItems(leading: Button(action: dismiss) {
                     Image(systemName: "xmark")
                 }
-                .font(.title), trailing: Button(action: {
-                    self.showAddLocationPopover = true
-                }) {
-                    Image(systemName: "plus")
-                }
-                .popover(isPresented: $showAddLocationPopover) {
-                    AddLocationView(callback: self.save)
-                        .frame(minWidth: 300)
-                }
-                .font(.title))
+                .font(.title), trailing: HStack {
+                    Button(action: {}) {
+                        Image(systemName: "magnifyingglass")
+                    }
+                    .font(.title)
+                    .padding(.trailing)
+                    Button(action: {
+                        self.showAddLocationPopover = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                    .popover(isPresented: $showAddLocationPopover) {
+                        AddLocationView(callback: self.save)
+                            .frame(minWidth: 300)
+                    }
+                    .font(.title)
+                })
             }
         }
         .onAppear {

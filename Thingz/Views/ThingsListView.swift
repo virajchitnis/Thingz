@@ -41,16 +41,23 @@ struct ThingsListView: View {
             }
         }
         .navigationBarTitle("Things")
-        .navigationBarItems(trailing: Button(action: {
-            self.showAddThingPopover = true
-        }) {
-            Image(systemName: "plus")
-        }
-        .popover(isPresented: $showAddThingPopover) {
-            AddThingView(location: self.location, callback: self.save)
-                .frame(minWidth: 300)
-        }
-        .font(.title))
+        .navigationBarItems(trailing: HStack {
+            Button(action: {}) {
+                Image(systemName: "magnifyingglass")
+            }
+            .font(.title)
+            .padding(.trailing)
+            Button(action: {
+                self.showAddThingPopover = true
+            }) {
+                Image(systemName: "plus")
+            }
+            .popover(isPresented: $showAddThingPopover) {
+                AddThingView(location: self.location, callback: self.save)
+                    .frame(minWidth: 300)
+            }
+            .font(.title)
+        })
     }
     
     func save(newThing: Thing) {
