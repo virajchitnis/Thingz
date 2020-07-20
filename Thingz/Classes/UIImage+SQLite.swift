@@ -52,17 +52,32 @@ extension UIImage {
         return loadedPhotos
     }
     
-    class func delete(for owner: UUID, from file: DatabaseFile) -> Bool {
+    class func delete(for owner: UUID, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
         let dbPhotos = TABLE_PHOTOS.filter(COLUMN_PHOTOS_OWNERID == owner.uuidString)
         if let db = file.db {
             do {
                 try db.run(dbPhotos.delete())
-                return true
+                completionHandler(nil)
             } catch {
-                debugPrint("Error deleting photos!")
-                return false
+                print("Unexpected error: \(error).")
+                completionHandler(error)
             }
         }
-        return false
+    }
+    
+    class func delete(for things: [Thing], from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        for thing in things {
+            var success = true
+            UIImage.delete(for: thing.id, from: file, completionHandler: { error in
+                if error != nil {
+                    success = false
+                    completionHandler(error)
+                }
+            })
+            if !success {
+                return
+            }
+        }
+        completionHandler(nil)
     }
 }

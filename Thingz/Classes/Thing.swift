@@ -75,66 +75,80 @@ class Thing {
     
     func update(in file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
         fileQueue.async {
-            let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == self.id.uuidString)
-            do {
-                try file.db?.run(thisThing.update(COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode))
-                
-                UIImage.delete(for: self.id, from: file)
-                for photo in self.photos {
-                    photo.save(to: file, withOwner: self.id)
+            UIImage.delete(for: self.id, from: file, completionHandler: { error in
+                if error == nil {
+                    for photo in self.photos {
+                        photo.save(to: file, withOwner: self.id)
+                    }
+                    
+                    let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == self.id.uuidString)
+                    if let db = file.db {
+                        do {
+                            try db.run(thisThing.update(COLUMN_THING_NAME <- self.name, COLUMN_THING_DESC <- self.description, COLUMN_THING_QUANT <- Int64(self.quantity), COLUMN_THING_BARCODE <- self.barcode))
+                            DispatchQueue.main.async {
+                                completionHandler(nil)
+                            }
+                        } catch {
+                            print("Unexpected error: \(error).")
+                            DispatchQueue.main.async {
+                                completionHandler(error)
+                            }
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completionHandler(error)
+                    }
                 }
-                
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            } catch {
-                print("Unexpected error: \(error).")
-                DispatchQueue.main.async {
-                    completionHandler(error)
-                }
-            }
+            })
         }
     }
     
     class func delete(thing: Thing, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
         fileQueue.async {
-            let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
-            do {
-                try file.db?.run(thisThing.delete())
-                
-                UIImage.delete(for: thing.id, from: file)
-                
-                DispatchQueue.main.async {
-                    completionHandler(nil)
+            UIImage.delete(for: thing.id, from: file, completionHandler: { error in
+                if error == nil {
+                    let thisThing = TABLE_THINGS.filter(COLUMN_THING_ID == thing.id.uuidString)
+                    do {
+                        try file.db?.run(thisThing.delete())
+                        DispatchQueue.main.async {
+                            completionHandler(nil)
+                        }
+                    } catch {
+                        print("Unexpected error: \(error).")
+                        DispatchQueue.main.async {
+                            completionHandler(error)
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completionHandler(error)
+                    }
                 }
-            } catch {
-                print("Unexpected error: \(error).")
-                DispatchQueue.main.async {
-                    completionHandler(error)
-                }
-            }
+            })
         }
     }
     
     /* Delete all things belonging to a particular location.
-     * This function is not asynchronous because it will only be called when a thing is being deleted.
-     * The function for deleting a thing is already async, so this does not need to be async.
+     * This function is not asynchronous because it will only be called when a location is being deleted.
+     * The function for deleting a location is already async, so this does not need to be async.
      */
     class func delete(things: [Thing], for location: Location, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
-        let dbThings = TABLE_THINGS.filter(COLUMN_THING_LOCID == location.id.uuidString)
-        if let db = file.db {
-            do {
-                try db.run(dbThings.delete())
-                
-                for thing in things {
-                    UIImage.delete(for: thing.id, from: file)
+        UIImage.delete(for: things, from: file, completionHandler: { error in
+            if error == nil {
+                let dbThings = TABLE_THINGS.filter(COLUMN_THING_LOCID == location.id.uuidString)
+                if let db = file.db {
+                    do {
+                        try db.run(dbThings.delete())
+                        completionHandler(nil)
+                    } catch {
+                        print("Unexpected error: \(error).")
+                        completionHandler(error)
+                    }
                 }
-                
-                completionHandler(nil)
-            } catch {
-                print("Unexpected error: \(error).")
+            } else {
                 completionHandler(error)
             }
-        }
+        })
     }
 }

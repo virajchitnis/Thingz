@@ -117,38 +117,16 @@ class Location: ObservableObject {
     
     func update(in file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
         fileQueue.async {
-            let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == self.id.uuidString)
-            do {
-                try file.db?.run(thisLocation.update(COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode))
-                
-                UIImage.delete(for: self.id, from: file)
-                for photo in self.photos {
-                    photo.save(to: file, withOwner: self.id)
-                }
-                
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            } catch {
-                print("Unexpected error: \(error).")
-                DispatchQueue.main.async {
-                    completionHandler(error)
-                }
-            }
-        }
-    }
-    
-    class func delete(location: Location, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
-        fileQueue.async {
-            if let db = file.db {
-                let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == location.id.uuidString)
-                
-                Thing.delete(things: location.things, for: location, from: file, completionHandler: { error in
-                    if error == nil {
-                        UIImage.delete(for: location.id, from: file)
-                        
+            UIImage.delete(for: self.id, from: file, completionHandler: { error in
+                if error == nil {
+                    for photo in self.photos {
+                        photo.save(to: file, withOwner: self.id)
+                    }
+                    
+                    let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == self.id.uuidString)
+                    if let db = file.db {
                         do {
-                            try db.run(thisLocation.delete())
+                            try db.run(thisLocation.update(COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode))
                             DispatchQueue.main.async {
                                 completionHandler(nil)
                             }
@@ -159,8 +137,47 @@ class Location: ObservableObject {
                             }
                         }
                     }
-                })
-            }
+                } else {
+                    DispatchQueue.main.async {
+                        completionHandler(error)
+                    }
+                }
+            })
+        }
+    }
+    
+    class func delete(location: Location, from file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        fileQueue.async {
+            Thing.delete(things: location.things, for: location, from: file, completionHandler: { error in
+                if error == nil {
+                    UIImage.delete(for: location.id, from: file, completionHandler: { error in
+                        if error == nil {
+                            let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == location.id.uuidString)
+                            if let db = file.db {
+                                do {
+                                    try db.run(thisLocation.delete())
+                                    DispatchQueue.main.async {
+                                        completionHandler(nil)
+                                    }
+                                } catch {
+                                    print("Unexpected error: \(error).")
+                                    DispatchQueue.main.async {
+                                        completionHandler(error)
+                                    }
+                                }
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                completionHandler(error)
+                            }
+                        }
+                    })
+                } else {
+                    DispatchQueue.main.async {
+                        completionHandler(error)
+                    }
+                }
+            })
         }
     }
 }
