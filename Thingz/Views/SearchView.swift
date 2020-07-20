@@ -11,6 +11,7 @@ import SwiftUI
 struct SearchView: View {
     @Environment(\.presentationMode) var presentation
     @State private var searchText: String = ""
+    @State private var filteredThings: [Thing] = []
     
     var body: some View {
         VStack {
@@ -30,22 +31,8 @@ struct SearchView: View {
                 )
             }
             .padding()
-            List {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Name")
-                            .font(.headline)
-                        Text("2345678453543")
-                            .font(.footnote)
-                            .foregroundColor(Color.gray)
-                        Text("Description")
-                            .foregroundColor(Color.gray)
-                        Text("Type: Thing")
-                            .padding(.top)
-                    }
-                    Spacer()
-                    Text("5")
-                }
+            List(self.filteredThings, id: \.id) { thing in
+                SearchRowView(thing: thing)
             }
         }
     }
