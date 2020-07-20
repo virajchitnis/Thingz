@@ -13,6 +13,7 @@ struct ThingsListView: View {
     @ObservedObject var location: Location
     @State private var showAddThingPopover: Bool = false
     @State private var showEditThingPopover: Bool = false
+    @State private var showSearchPane: Bool = false
     
     var body: some View {
         List(location.things, id: \.id) { thing in
@@ -40,11 +41,16 @@ struct ThingsListView: View {
         }
         .navigationBarTitle("Things")
         .navigationBarItems(trailing: HStack {
-            Button(action: {}) {
+            Button(action: {
+                self.showSearchPane = true
+            }) {
                 Image(systemName: "magnifyingglass")
             }
             .font(.title)
             .padding(.trailing)
+            .sheet(isPresented: $showSearchPane, content: {
+                SearchView(fileURL: self.fileURL)
+            })
             Button(action: {
                 self.showAddThingPopover = true
             }) {
