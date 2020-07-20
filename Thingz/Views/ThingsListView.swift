@@ -72,11 +72,13 @@ struct ThingsListView: View {
     
     func edit(thing: Thing) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            if thing.update(in: dbFile) {
-                if let thingIndex = self.location.things.firstIndex(where: { $0.id == thing.id }) {
-                    self.location.things[thingIndex] = thing
+            thing.update(in: dbFile, completionHandler: { error in
+                if error == nil {
+                    if let thingIndex = self.location.things.firstIndex(where: { $0.id == thing.id }) {
+                        self.location.things[thingIndex] = thing
+                    }
                 }
-            }
+            })
         }
     }
     
