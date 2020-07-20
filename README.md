@@ -11,7 +11,7 @@ Features
 - Scan barcodes to identify things.
 - Document based app that saves everything to a user selected .thingz file. 
 - Add photos to locations and things. 
-- Separate tab for searching for and finding things along with their locations. (incomplete)
+- Separate tab for searching for and finding things along with their locations.
 
 Build
 ------
