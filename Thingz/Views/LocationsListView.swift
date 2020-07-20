@@ -109,11 +109,13 @@ struct LocationsListView: View {
     
     func edit(location: Location) {
         if let dbFile = DatabaseFile(path: self.fileURL) {
-            if location.update(in: dbFile) {
-                if let locationIndex = self.locations.firstIndex(where: { $0.id == location.id }) {
-                    self.locations[locationIndex] = location
+            location.update(in: dbFile, completionHandler: { error in
+                if error == nil {
+                    if let locationIndex = self.locations.firstIndex(where: { $0.id == location.id }) {
+                        self.locations[locationIndex] = location
+                    }
                 }
-            }
+            })
         }
     }
     

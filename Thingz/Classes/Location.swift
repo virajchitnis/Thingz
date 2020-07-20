@@ -109,34 +109,32 @@ class Location: ObservableObject {
                     }
                 }
             } catch {
-                debugPrint("No things found")
+                print("Unexpected error: \(error).")
             }
         }
         self.things = loadedThings
     }
     
-    func update(in file: DatabaseFile) -> Bool {
-        let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == self.id.uuidString)
-        do {
-            try file.db?.run(thisLocation.update(COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode))
-            
-            var success = true
-            if !UIImage.delete(for: self.id, from: file) {
-                success = false
-            }
-            for photo in self.photos {
-                if photo.save(to: file, withOwner: self.id) == nil {
-                    success = false
+    func update(in file: DatabaseFile, completionHandler: @escaping (Error?) -> Void) {
+        fileQueue.async {
+            let thisLocation = TABLE_LOCATIONS.filter(COLUMN_LOCATION_ID == self.id.uuidString)
+            do {
+                try file.db?.run(thisLocation.update(COLUMN_LOCATION_NAME <- self.name, COLUMN_LOCATION_DESC <- self.description, COLUMN_LOCATION_BARCODE <- self.barcode))
+                
+                UIImage.delete(for: self.id, from: file)
+                for photo in self.photos {
+                    photo.save(to: file, withOwner: self.id)
+                }
+                
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            } catch {
+                print("Unexpected error: \(error).")
+                DispatchQueue.main.async {
+                    completionHandler(error)
                 }
             }
-            
-            if !success {
-                return false
-            }
-            return true
-        } catch {
-            debugPrint("Error updating location!")
-            return false
         }
     }
     
