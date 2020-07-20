@@ -11,6 +11,7 @@ import SwiftUI
 struct SearchView: View {
     @Environment(\.presentationMode) var presentation
     var fileURL: URL
+    @State private var showBarcodeScanner: Bool = false
     @State private var filteredThings: [Thing] = []
     @State private var searchText: String = ""
     
@@ -28,13 +29,23 @@ struct SearchView: View {
                     Image(systemName: "magnifyingglass")
                     TextField("Search", text: binding)
                         .keyboardType(.webSearch)
+                    Button(action: {
+                        self.showBarcodeScanner = true
+                    }) {
+                        Image(systemName: "barcode.viewfinder")
+                    }
+                    .font(.title)
+                    .padding(.all, 2)
+                    .sheet(isPresented: $showBarcodeScanner, content: {
+                        BarcodeScannerView(callback: self.barcodeScanned)
+                    })
                 }
                     .padding(.leading, 10)
                     .padding(.trailing, 10)
                     .padding(.top, 8)
                     .padding(.bottom, 8)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: 7)
                             .stroke(Color.gray, lineWidth: 2)
                 )
             }
@@ -53,6 +64,11 @@ struct SearchView: View {
                 }
             })
         }
+    }
+    
+    func barcodeScanned(barcode: String) {
+        self.searchText = barcode
+        self.executeSearch(withKey: barcode)
     }
 }
 
